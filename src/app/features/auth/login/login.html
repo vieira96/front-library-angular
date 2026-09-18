@@ -1,0 +1,119 @@
+<div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+        Library APP
+      </h1>
+      <p class="mt-2 text-sm text-gray-600">
+        Faça login para acessar o sistema
+      </p>
+    </div>
+
+    <form
+      class="mt-8 space-y-6"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+      @if (errorMessage()) {
+        <div class="rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-red-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-red-800">
+                {{ errorMessage() }}
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="space-y-4 rounded-md shadow-sm">
+        <div>
+          <label for="email" class="sr-only">E-mail</label>
+          <input
+            id="email"
+            formControlName="email"
+            type="email"
+            autocomplete="email"
+            required
+            class="relative block w-full rounded-lg border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+            placeholder="E-mail"
+            [class.ring-red-500]="email?.invalid && email?.touched"
+          />
+          @if (email?.invalid && email?.touched) {
+            <p class="mt-1 text-sm text-red-600">
+              @if (email?.errors?.['required']) {
+                E-mail é obrigatório.
+              } @else if (email?.errors?.['email']) {
+                Informe um e-mail válido.
+              }
+            </p>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="sr-only">Senha</label>
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            class="relative block w-full rounded-lg border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+            placeholder="Senha"
+            [class.ring-red-500]="password?.invalid && password?.touched"
+          />
+          @if (password?.invalid && password?.touched) {
+            <p class="mt-1 text-sm text-red-600">
+              @if (password?.errors?.['required']) {
+                Senha é obrigatória.
+              } @else if (password?.errors?.['minlength']) {
+                Senha deve ter no mínimo 6 caracteres.
+              }
+            </p>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          [disabled]="isLoading()"
+          class="group relative flex w-full justify-center rounded-lg bg-indigo-600 px-3 py-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          @if (isLoading()) {
+            <svg lucideLoader class="mr-2 h-5 w-5 animate-spin"></svg>
+            Entrando...
+          } @else {
+            Entrar
+          }
+        </button>
+      </div>
+
+      <div class="text-center text-sm text-gray-600">
+        <p>
+          Não tem uma conta?
+          <a
+            routerLink="/auth/register"
+            class="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            Cadastre-se
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="min-h-screen bg-gray-50">
+  <app-header [title]="'Library App'" [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-header>
+
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    @if (isLoading()) {
+      <div class="flex justify-center">
+        <svg lucideLoader class="h-8 w-8 animate-spin text-indigo-600"></svg>
+      </div>
+    } @else if (user()) {
+      <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+          <h2 class="text-lg font-medium leading-6 text-gray-900">
+            Informações do Usuário
+          </h2>
+        </div>
+        <div class="border-t border-gray-200">
+          <dl>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Nome</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ user()?.name }}</dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">E-mail</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ user()?.email }}</dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Perfis</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+                @for (role of user()?.roles; track role) {
+                  <span class="mr-2 inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                    {{ role }}
+                  </span>
+                }
+              </dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Criado em</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ formatDate(user()?.createdAt) }}</dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Atualizado em</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ formatDate(user()?.updatedAt) }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    } @else if (errorMessage()) {
+      <div class="rounded-md bg-red-50 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-red-800">
+              {{ errorMessage() }}
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+</div>
