@@ -1,0 +1,10 @@
+<article class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200 transition hover:shadow-md">
+  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
+    <svg lucideBookOpen class="h-6 w-6"></svg>
+  </div>
+  <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ book().title }}</h3>
+  <p class="mt-1 text-sm text-gray-600">ISBN: {{ book().isbn }}</p>
+  <p class="mt-3 text-base font-semibold text-indigo-600">
+    {{ book().price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+  </p>
+</article>

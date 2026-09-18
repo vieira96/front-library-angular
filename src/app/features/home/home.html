@@ -1,48 +1,10 @@
 <div class="min-h-screen bg-gray-50">
-  <app-header [title]="'Library App'" [userName]="user()?.name ?? ''" (logoutClick)="logout()"></app-header>
+  <app-header [title]="'Library App'" (logoutClick)="logout()"></app-header>
 
   <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     @if (isLoading()) {
       <div class="flex justify-center">
         <svg lucideLoader class="h-8 w-8 animate-spin text-indigo-600"></svg>
-      </div>
-    } @else if (user()) {
-      <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-          <h2 class="text-lg font-medium leading-6 text-gray-900">
-            Informações do Usuário
-          </h2>
-        </div>
-        <div class="border-t border-gray-200">
-          <dl>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Nome</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ user()?.name }}</dd>
-            </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">E-mail</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ user()?.email }}</dd>
-            </div>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Perfis</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
-                @for (role of user()?.roles; track role) {
-                  <span class="mr-2 inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                    {{ role }}
-                  </span>
-                }
-              </dd>
-            </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Criado em</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ formatDate(user()?.createdAt) }}</dd>
-            </div>
-            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">Atualizado em</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">{{ formatDate(user()?.updatedAt) }}</dd>
-            </div>
-          </dl>
-        </div>
       </div>
     } @else if (errorMessage()) {
       <div class="rounded-md bg-red-50 p-4">
@@ -68,6 +30,38 @@
           </div>
         </div>
       </div>
+    } @else {
+      <section aria-labelledby="dashboard-title">
+        <h2 id="dashboard-title" class="text-2xl font-bold text-gray-900">
+          Biblioteca
+        </h2>
+
+        @if (isBooksLoading()) {
+          <div class="mt-6 flex justify-center">
+            <svg lucideLoader class="h-8 w-8 animate-spin text-indigo-600"></svg>
+          </div>
+        } @else if (booksErrorMessage()) {
+          <p class="mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-800">
+            {{ booksErrorMessage() }}
+          </p>
+        } @else if (books().length) {
+          <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            @for (book of books(); track book.id) {
+              <app-book-card [book]="book"></app-book-card>
+            }
+          </div>
+          <app-pagination
+            [page]="currentPage()"
+            [totalPages]="totalPages()"
+            [disabled]="isBooksLoading()"
+            (pageChange)="changePage($event)"
+          ></app-pagination>
+        } @else {
+          <p class="mt-6 rounded-lg bg-white p-6 text-sm text-gray-600 shadow-sm ring-1 ring-gray-200">
+            Nenhum livro cadastrado.
+          </p>
+        }
+      </section>
     }
   </main>
 </div>
