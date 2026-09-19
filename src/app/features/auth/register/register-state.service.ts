@@ -19,7 +19,9 @@ export class RegisterStateService {
     this.registerApi.register(data).pipe(
       tap(() => {
         this.isLoading.set(false);
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/auth/login'], {
+          state: { successMessage: 'Conta criada com sucesso! Agora faça login.' },
+        });
       }),
       catchError((error) => {
         const message = error.error?.message || 'Erro ao criar conta';

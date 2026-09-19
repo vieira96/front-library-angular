@@ -1,12 +1,21 @@
-import { setupComponent } from '@/app/testing/setup-component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { Login } from './login';
 
 describe('Login', () => {
   let component: Login;
+  let fixture: ComponentFixture<Login>;
 
   beforeEach(async () => {
-    const fixture = await setupComponent(Login);
+    await TestBed.configureTestingModule({
+      imports: [Login],
+      providers: [provideRouter([]), provideHttpClient()],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {

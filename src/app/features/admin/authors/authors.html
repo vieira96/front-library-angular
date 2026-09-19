@@ -1,0 +1,76 @@
+<div class="min-h-screen bg-gray-50">
+  <app-header [title]="'Admin - Autores'" (logoutClick)="logout()"></app-header>
+
+  <main class="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    @if (successMessage()) {
+      <app-toast
+        [message]="successMessage()!"
+        type="success"
+        (dismissed)="successMessage.set(null)"
+      ></app-toast>
+    }
+
+    @if (isLoading()) {
+      <div class="flex justify-center">
+        <svg lucideLoader class="h-8 w-8 animate-spin text-indigo-600"></svg>
+      </div>
+    } @else if (errorMessage()) {
+      <div class="rounded-md bg-red-50 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-red-800">
+              {{ errorMessage() }}
+            </p>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <section aria-labelledby="authors-title">
+        <h2 id="authors-title" class="text-2xl font-bold text-gray-900">
+          Autores
+        </h2>
+
+        @if (isAuthorsLoading()) {
+          <div class="mt-6 flex justify-center">
+            <svg lucideLoader class="h-8 w-8 animate-spin text-indigo-600"></svg>
+          </div>
+        } @else if (authorsErrorMessage()) {
+          <p class="mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-800">
+            {{ authorsErrorMessage() }}
+          </p>
+        } @else if (authors().length) {
+          <div class="mt-6">
+            <app-authors-table
+              [authors]="authors()"
+              (success)="onDeleteSuccess()"
+            ></app-authors-table>
+          </div>
+          <app-pagination
+            [page]="currentPage()"
+            [totalPages]="totalPages()"
+            [disabled]="isAuthorsLoading()"
+            (pageChange)="changePage($event)"
+          ></app-pagination>
+        } @else {
+          <p class="mt-6 rounded-lg bg-white p-6 text-sm text-gray-600 shadow-sm ring-1 ring-gray-200">
+            Nenhum autor cadastrado.
+          </p>
+        }
+      </section>
+    }
+  </main>
+</div>

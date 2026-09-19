@@ -1,15 +1,23 @@
-import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
-import { LucideLogOut } from '@lucide/angular';
+import { Component, ChangeDetectionStrategy, input, output, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { LucideLogOut, LucideHome } from '@lucide/angular';
+import { AuthStateService } from '@/app/core/auth/auth-state.service';
+import { isAdmin } from '@/app/core/auth/helper/is-admin';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [LucideLogOut],
+  imports: [RouterLink, LucideLogOut, LucideHome],
   templateUrl: './header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
+  private readonly authState = inject(AuthStateService);
+
   readonly title = input<string>('Library App');
-  readonly userName = input<string>('');
   readonly logoutClick = output<void>();
+
+  get isAdmin(): boolean {
+    return isAdmin(this.authState.user());
+  }
 }
