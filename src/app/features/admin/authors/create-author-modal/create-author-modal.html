@@ -1,0 +1,110 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="fixed inset-0 bg-black/50"></div>
+  <div class="relative mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+    <h3 class="text-lg font-semibold text-gray-900">
+      Novo autor
+    </h3>
+
+    @if (errorMessage()) {
+      <p class="mt-2 rounded-md bg-red-50 p-3 text-sm text-red-800">
+        {{ errorMessage() }}
+      </p>
+    }
+
+    <form [formGroup]="form" class="mt-4 space-y-4">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">
+          Nome
+        </label>
+        <input
+          id="name"
+          formControlName="name"
+          type="text"
+          autocomplete="name"
+          class="mt-1 block w-full rounded-lg border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+          placeholder="Nome do autor"
+          [class.ring-red-500]="name?.invalid && name?.touched"
+        />
+        @if (name?.invalid && name?.touched) {
+          <p class="mt-1 text-sm text-red-600">
+            @if (name?.errors?.['required']) {
+              Nome é obrigatório.
+            } @else if (name?.errors?.['minlength']) {
+              Nome deve ter no mínimo 2 caracteres.
+            } @else if (name?.errors?.['maxlength']) {
+              Nome deve ter no máximo 100 caracteres.
+            }
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="birthdate" class="block text-sm font-medium text-gray-700">
+          Data de nascimento
+        </label>
+        <input
+          id="birthdate"
+          formControlName="birthdate"
+          type="date"
+          class="mt-1 block w-full rounded-lg border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+          [class.ring-red-500]="birthdate?.invalid && birthdate?.touched"
+        />
+        @if (birthdate?.invalid && birthdate?.touched) {
+          <p class="mt-1 text-sm text-red-600">
+            @if (birthdate?.errors?.['futureDate']) {
+              Data de nascimento não pode ser uma data futura.
+            } @else if (birthdate?.errors?.['required']) {
+              Data de nascimento é obrigatória.
+            }
+          </p>
+        }
+      </div>
+
+      <div>
+        <label for="nationality" class="block text-sm font-medium text-gray-700">
+          Nacionalidade
+        </label>
+        <input
+          id="nationality"
+          formControlName="nationality"
+          type="text"
+          class="mt-1 block w-full rounded-lg border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+          placeholder="Nacionalidade"
+          [class.ring-red-500]="nationality?.invalid && nationality?.touched"
+        />
+        @if (nationality?.invalid && nationality?.touched) {
+          <p class="mt-1 text-sm text-red-600">
+            @if (nationality?.errors?.['required']) {
+              Nacionalidade é obrigatória.
+            } @else if (nationality?.errors?.['maxlength']) {
+              Nacionalidade deve ter no máximo 100 caracteres.
+            }
+          </p>
+        }
+      </div>
+    </form>
+
+    <div class="mt-6 flex justify-end gap-3">
+      <button
+        type="button"
+        [disabled]="isLoading()"
+        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+        (click)="cancel.emit()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        [disabled]="isLoading() || form.invalid"
+        class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+        (click)="submit()"
+      >
+        @if (isLoading()) {
+          Criando...
+        } @else {
+          Criar autor
+        }
+      </button>
+    </div>
+  </div>
+</div>

@@ -139,4 +139,42 @@ describe('Authors', () => {
     );
     reloadReq.flush(mockAuthorsResponse);
   });
+
+  it('should open create modal when FAB is clicked', () => {
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    req.flush(mockAuthorsResponse);
+
+    expect(component.isCreateModalOpen()).toBeFalse();
+
+    const fabButton = fixture.nativeElement.querySelector('button.fixed');
+    fabButton.click();
+
+    expect(component.isCreateModalOpen()).toBeTrue();
+  });
+
+  it('should close modal and show toast after successful creation', () => {
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    req.flush(mockAuthorsResponse);
+
+    component.isCreateModalOpen.set(true);
+    fixture.detectChanges();
+
+    component.onCreateSuccess();
+
+    expect(component.isCreateModalOpen()).toBeFalse();
+    expect(component.successMessage()).toBe('Autor cadastrado com sucesso.');
+
+    const reloadReq = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    reloadReq.flush(mockAuthorsResponse);
+  });
 });

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '@/environments/environment';
 import { PageResponse } from '@/app/core/http/page-response.model';
 import { Author } from './author.model';
+import { CreateAuthorRequest } from './create-author-modal/create-author-request.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthorsApiService {
@@ -17,6 +18,10 @@ export class AuthorsApiService {
       .set('include', 'bookCount');
 
     return this.http.get<PageResponse<Author>>(this.apiUrl, { params });
+  }
+
+  createAuthor(request: CreateAuthorRequest): Observable<Author> {
+    return this.http.post<Author>(this.apiUrl, request);
   }
 
   deleteAuthor(id: string): Observable<void> {
