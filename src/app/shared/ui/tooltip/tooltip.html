@@ -1,0 +1,21 @@
+<span
+  class="relative inline-flex"
+  [attr.tabindex]="enabled() ? 0 : null"
+  (mouseenter)="show()"
+  (mouseleave)="hide()"
+  (focusin)="show()"
+  (focusout)="hide()"
+  (click)="showFromClick($event)"
+>
+  <ng-content></ng-content>
+
+  @if (enabled() && visible()) {
+    <span
+      role="tooltip"
+      class="pointer-events-none absolute z-20 w-64 whitespace-normal rounded-lg bg-gray-900 px-3 py-2 text-left text-xs font-normal text-white shadow-lg"
+      [class]="positionClasses()"
+    >
+      {{ text() }}
+    </span>
+  }
+</span>

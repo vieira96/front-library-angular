@@ -1,20 +1,20 @@
-<div class="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200">
-  <table class="min-w-full divide-y divide-gray-200">
+<div class="overflow-x-auto rounded-lg bg-white shadow-sm ring-1 ring-gray-200">
+  <table class="min-w-[800px] w-full table-fixed divide-y divide-gray-200">
     <thead class="bg-gray-50">
       <tr>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
           Nome
         </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+        <th scope="col" class="w-48 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
           Nacionalidade
         </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+        <th scope="col" class="w-52 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
           Data de Nascimento
         </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+        <th scope="col" class="w-24 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
           Livros
         </th>
-        <th scope="col" class="relative px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+        <th scope="col" class="relative w-32 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
           <span class="sr-only">Ações</span>
         </th>
       </tr>
@@ -22,13 +22,13 @@
     <tbody class="divide-y divide-gray-200 bg-white">
       @for (author of authors(); track author.id) {
         <tr class="hover:bg-gray-50">
-          <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+          <td class="break-all px-6 py-4 text-sm font-medium text-gray-900">
             {{ author.name }}
           </td>
-          <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+          <td class="break-words px-6 py-4 text-sm text-gray-600">
             {{ author.nationality }}
           </td>
-          <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+          <td class="px-6 py-4 text-sm text-gray-600">
             {{ author.birthdate | date:'dd/MM/yyyy' }}
           </td>
           <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
@@ -44,24 +44,23 @@
               >
                 <svg lucidePencil class="h-5 w-5"></svg>
               </button>
-              <div class="group relative inline-block">
+              <app-tooltip
+                text="Não é possível excluir este autor pois ele possui livros cadastrados."
+                position="left"
+                [enabled]="(author.bookCount ?? 0) > 0"
+              >
                 <button
                   type="button"
                   [attr.data-testid]="'delete-author-' + author.id"
                   [disabled]="(author.bookCount ?? 0) > 0"
                   [class]="(author.bookCount ?? 0) > 0
-                    ? 'cursor-not-allowed rounded-lg p-2 text-gray-300'
+                    ? 'pointer-events-none cursor-not-allowed rounded-lg p-2 text-gray-300'
                     : 'cursor-pointer rounded-lg p-2 text-red-600 hover:bg-red-50 hover:text-red-700'"
                   (click)="openDeleteModal(author)"
                 >
                   <svg lucideTrash class="h-5 w-5"></svg>
                 </button>
-                @if ((author.bookCount ?? 0) > 0) {
-                  <div class="pointer-events-none absolute right-0 top-full z-10 mt-1 w-72 rounded-lg bg-gray-900 px-3 py-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
-                    Não é possível excluir este autor pois ele possui livros cadastrados.
-                  </div>
-                }
-              </div>
+              </app-tooltip>
             </div>
           </td>
         </tr>
