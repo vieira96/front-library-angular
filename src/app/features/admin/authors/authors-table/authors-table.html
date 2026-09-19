@@ -35,23 +35,33 @@
             {{ author.bookCount ?? 0 }}
           </td>
           <td class="relative whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-            <div class="group relative inline-block">
+            <div class="flex items-center justify-end gap-1">
               <button
                 type="button"
-                [attr.data-testid]="'delete-author-' + author.id"
-                [disabled]="(author.bookCount ?? 0) > 0"
-                [class]="(author.bookCount ?? 0) > 0
-                  ? 'cursor-not-allowed rounded-lg p-2 text-gray-300'
-                  : 'cursor-pointer rounded-lg p-2 text-red-600 hover:bg-red-50 hover:text-red-700'"
-                (click)="openDeleteModal(author)"
+                [attr.data-testid]="'edit-author-' + author.id"
+                class="cursor-pointer rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+                (click)="edit.emit(author)"
               >
-                <svg lucideTrash class="h-5 w-5"></svg>
+                <svg lucidePencil class="h-5 w-5"></svg>
               </button>
-              @if ((author.bookCount ?? 0) > 0) {
-                <div class="pointer-events-none absolute right-0 top-full z-10 mt-1 w-72 rounded-lg bg-gray-900 px-3 py-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
-                  Não é possível excluir este autor pois ele possui livros cadastrados.
-                </div>
-              }
+              <div class="group relative inline-block">
+                <button
+                  type="button"
+                  [attr.data-testid]="'delete-author-' + author.id"
+                  [disabled]="(author.bookCount ?? 0) > 0"
+                  [class]="(author.bookCount ?? 0) > 0
+                    ? 'cursor-not-allowed rounded-lg p-2 text-gray-300'
+                    : 'cursor-pointer rounded-lg p-2 text-red-600 hover:bg-red-50 hover:text-red-700'"
+                  (click)="openDeleteModal(author)"
+                >
+                  <svg lucideTrash class="h-5 w-5"></svg>
+                </button>
+                @if ((author.bookCount ?? 0) > 0) {
+                  <div class="pointer-events-none absolute right-0 top-full z-10 mt-1 w-72 rounded-lg bg-gray-900 px-3 py-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                    Não é possível excluir este autor pois ele possui livros cadastrados.
+                  </div>
+                }
+              </div>
             </div>
           </td>
         </tr>

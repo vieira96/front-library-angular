@@ -148,12 +148,12 @@ describe('Authors', () => {
     );
     req.flush(mockAuthorsResponse);
 
-    expect(component.isCreateModalOpen()).toBeFalse();
+    expect(component.isCreateUpdateModalOpen()).toBeFalse();
 
     const fabButton = fixture.nativeElement.querySelector('button.fixed');
     fabButton.click();
 
-    expect(component.isCreateModalOpen()).toBeTrue();
+    expect(component.isCreateUpdateModalOpen()).toBeTrue();
   });
 
   it('should close modal and show toast after successful creation', () => {
@@ -164,17 +164,76 @@ describe('Authors', () => {
     );
     req.flush(mockAuthorsResponse);
 
-    component.isCreateModalOpen.set(true);
+    component.isCreateUpdateModalOpen.set(true);
     fixture.detectChanges();
 
-    component.onCreateSuccess();
+    component.onModalSuccess();
 
-    expect(component.isCreateModalOpen()).toBeFalse();
+    expect(component.isCreateUpdateModalOpen()).toBeFalse();
     expect(component.successMessage()).toBe('Autor cadastrado com sucesso.');
 
     const reloadReq = httpMock.expectOne(
       `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
     );
     reloadReq.flush(mockAuthorsResponse);
+  });
+
+  it('should open edit modal with author when clicking edit', () => {
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    req.flush(mockAuthorsResponse);
+    fixture.detectChanges();
+
+    const editButton = fixture.nativeElement.querySelector(
+      '[data-testid="edit-author-1"]',
+    );
+    editButton.click();
+
+    expect(component.isCreateUpdateModalOpen()).toBeTrue();
+    expect(component.authorToEdit()?.id).toBe('1');
+    expect(component.authorToEdit()?.name).toBe('Machado de Assis');
+  });
+
+  it('should close modal and show toast after successful update', () => {
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    req.flush(mockAuthorsResponse);
+
+    component.openEditModal(mockAuthorsResponse.content[0]);
+    fixture.detectChanges();
+
+    component.onModalSuccess();
+
+    expect(component.isCreateUpdateModalOpen()).toBeFalse();
+    expect(component.authorToEdit()).toBeNull();
+    expect(component.successMessage()).toBe('Autor atualizado com sucesso.');
+
+    const reloadReq = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    reloadReq.flush(mockAuthorsResponse);
+  });
+
+  it('should clear authorToEdit when closing modal', () => {
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne(
+      `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
+    );
+    req.flush(mockAuthorsResponse);
+
+    component.openEditModal(mockAuthorsResponse.content[0]);
+    expect(component.authorToEdit()).not.toBeNull();
+
+    component.closeModal();
+
+    expect(component.isCreateUpdateModalOpen()).toBeFalse();
+    expect(component.authorToEdit()).toBeNull();
   });
 });

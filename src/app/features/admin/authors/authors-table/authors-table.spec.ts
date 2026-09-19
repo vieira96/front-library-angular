@@ -102,4 +102,22 @@ describe('AuthorsTable', () => {
     expect(component.showDeleteModal()).toBeFalse();
     expect(component.success.emit).toHaveBeenCalled();
   });
+
+  it('should render edit button for each author', () => {
+    const editButtons = fixture.nativeElement.querySelectorAll(
+      '[data-testid^="edit-author-"]',
+    );
+    expect(editButtons.length).toBe(2);
+  });
+
+  it('should emit edit with author when clicking edit button', () => {
+    spyOn(component.edit, 'emit');
+
+    const editButton = fixture.nativeElement.querySelector(
+      '[data-testid="edit-author-1"]',
+    );
+    editButton.click();
+
+    expect(component.edit.emit).toHaveBeenCalledWith(mockAuthors[0]);
+  });
 });

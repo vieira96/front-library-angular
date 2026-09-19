@@ -7,12 +7,12 @@ import { Author } from './author.model';
 import { Pagination } from '@/app/shared/ui/pagination/pagination';
 import { AuthorsTable } from './authors-table/authors-table';
 import { Toast } from '@/app/shared/ui/toast/toast';
-import { CreateAuthorModal } from './create-author-modal/create-author-modal';
+import { CreateUpdateAuthorModal } from './create-update-author-modal/create-update-author-modal';
 
 @Component({
   selector: 'app-admin-authors',
   standalone: true,
-  imports: [Header, LucideLoader, LucidePlus, Pagination, AuthorsTable, Toast, CreateAuthorModal],
+  imports: [Header, LucideLoader, LucidePlus, Pagination, AuthorsTable, Toast, CreateUpdateAuthorModal],
   templateUrl: './authors.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -28,7 +28,8 @@ export class Authors implements OnInit {
   readonly currentPage = signal(1);
   readonly totalPages = signal(0);
   readonly successMessage = signal<string | null>(null);
-  readonly isCreateModalOpen = signal(false);
+  readonly isCreateUpdateModalOpen = signal(false);
+  readonly authorToEdit = signal<Author | null>(null);
 
   ngOnInit(): void {
     this.authState.restoreSession().subscribe({
@@ -61,9 +62,25 @@ export class Authors implements OnInit {
     this.loadAuthors(this.currentPage());
   }
 
-  onCreateSuccess(): void {
-    this.isCreateModalOpen.set(false);
-    this.successMessage.set('Autor cadastrado com sucesso.');
+  openCreateModal(): void {
+    this.authorToEdit.set(null);
+    this.isCreateUpdateModalOpen.set(true);
+  }
+
+  openEditModal(author: Author): void {
+    this.authorToEdit.set(author);
+    this.isCreateUpdateModalOpen.set(true);
+  }
+
+  closeModal(): void {
+    this.isCreateUpdateModalOpen.set(false);
+    this.authorToEdit.set(null);
+  }
+
+  onModalSuccess(): void {
+    const isUpdate = !!this.authorToEdit();
+    this.closeModal();
+    this.successMessage.set(isUpdate ? 'Autor atualizado com sucesso.' : 'Autor cadastrado com sucesso.');
     this.loadAuthors(this.currentPage());
   }
 

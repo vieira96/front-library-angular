@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, signal, output, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal, input, output, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthorsApiService } from '../authors-api.service';
+import { Author } from '../author.model';
 
 function notFutureDate(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -17,19 +18,21 @@ function notFutureDate(): ValidatorFn {
 }
 
 @Component({
-  selector: 'app-create-author-modal',
+  selector: 'app-create-update-author-modal',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './create-author-modal.html',
+  templateUrl: './create-update-author-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateAuthorModal {
+export class CreateUpdateAuthorModal implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authorsApi = inject(AuthorsApiService);
 
+  readonly author = input<Author | null>(null);
   readonly cancel = output<void>();
   readonly success = output<void>();
 
+  readonly isUpdate = computed(() => !!this.author());
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
@@ -51,6 +54,17 @@ export class CreateAuthorModal {
     return this.form.get('nationality');
   }
 
+  ngOnInit(): void {
+    const author = this.author();
+    if (author) {
+      this.form.patchValue({
+        name: author.name,
+        birthdate: author.birthdate,
+        nationality: author.nationality,
+      });
+    }
+  }
+
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -60,13 +74,20 @@ export class CreateAuthorModal {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.authorsApi.createAuthor(this.form.getRawValue()).subscribe({
+    const request = this.form.getRawValue();
+    const author = this.author();
+
+    const observable = author
+      ? this.authorsApi.updateAuthor(author.id, request)
+      : this.authorsApi.createAuthor(request);
+
+    observable.subscribe({
       next: () => {
         this.isLoading.set(false);
         this.success.emit();
       },
       error: (err) => {
-        this.errorMessage.set(err.error?.message || 'Não foi possível criar o autor.');
+        this.errorMessage.set(err.error?.message || 'Não foi possível salvar o autor.');
         this.isLoading.set(false);
       },
     });

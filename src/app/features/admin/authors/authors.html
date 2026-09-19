@@ -56,6 +56,7 @@
           <div class="mt-6">
             <app-authors-table
               [authors]="authors()"
+              (edit)="openEditModal($event)"
               (success)="onDeleteSuccess()"
             ></app-authors-table>
           </div>
@@ -77,15 +78,16 @@
   <button
     type="button"
     class="fixed bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg transition-colors hover:bg-indigo-500"
-    (click)="isCreateModalOpen.set(true)"
+    (click)="openCreateModal()"
   >
     <svg lucidePlus class="h-6 w-6"></svg>
   </button>
 
-  @if (isCreateModalOpen()) {
-    <app-create-author-modal
-      (cancel)="isCreateModalOpen.set(false)"
-      (success)="onCreateSuccess()"
-    ></app-create-author-modal>
+  @if (isCreateUpdateModalOpen()) {
+    <app-create-update-author-modal
+      [author]="authorToEdit()"
+      (cancel)="closeModal()"
+      (success)="onModalSuccess()"
+    ></app-create-update-author-modal>
   }
 </div>
