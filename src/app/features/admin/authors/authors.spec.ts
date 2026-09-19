@@ -3,10 +3,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { Authors } from './authors';
 import { AuthStateService } from '@/app/core/auth/auth-state.service';
+import { CountryService } from '@/app/shared/ui/country-input/country.service';
 import { environment } from '@/environments/environment';
-import { of, throwError } from 'rxjs';
 
 describe('Authors', () => {
   let component: Authors;
@@ -16,6 +17,10 @@ describe('Authors', () => {
     user: WritableSignal<null>;
     restoreSession: jasmine.Spy;
     logout: jasmine.Spy;
+  };
+
+  const mockCountryService = {
+    getCountries: () => of(['Argentina', 'Brasil', 'Portugal']),
   };
 
   const mockAuthorsResponse = {
@@ -51,6 +56,7 @@ describe('Authors', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: AuthStateService, useValue: mockAuthState },
+        { provide: CountryService, useValue: mockCountryService },
       ],
     }).compileComponents();
 

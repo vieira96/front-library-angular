@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, computed, signal, input, output, in
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthorsApiService } from '../authors-api.service';
 import { Author } from '../author.model';
+import { CountryInput } from '@/app/shared/ui/country-input/country-input';
 
 function notFutureDate(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -20,7 +21,7 @@ function notFutureDate(): ValidatorFn {
 @Component({
   selector: 'app-create-update-author-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CountryInput],
   templateUrl: './create-update-author-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,6 +64,11 @@ export class CreateUpdateAuthorModal implements OnInit {
         nationality: author.nationality,
       });
     }
+  }
+
+  onNationalityChange(value: string): void {
+    this.nationality?.setValue(value);
+    this.nationality?.markAsTouched();
   }
 
   submit(): void {

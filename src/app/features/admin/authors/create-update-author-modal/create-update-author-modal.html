@@ -65,17 +65,14 @@
       </div>
 
       <div>
-        <label for="nationality" class="block text-sm font-medium text-gray-700">
-          Nacionalidade
-        </label>
-        <input
-          id="nationality"
-          formControlName="nationality"
-          type="text"
-          class="mt-1 block w-full rounded-lg border-0 p-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-          placeholder="Nacionalidade"
-          [class.ring-red-500]="nationality?.invalid && nationality?.touched"
-        />
+        <app-country-input
+          label="Nacionalidade"
+          placeholder="Buscar país..."
+          [required]="true"
+          [invalid]="!!(nationality?.invalid && nationality?.touched)"
+          [value]="nationality?.value || ''"
+          (valueChange)="onNationalityChange($event)"
+        ></app-country-input>
         @if (nationality?.invalid && nationality?.touched) {
           <p class="mt-1 text-sm text-red-600">
             @if (nationality?.errors?.['required']) {

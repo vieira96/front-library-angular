@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 import { CreateUpdateAuthorModal } from './create-update-author-modal';
 import { Author } from '../author.model';
+import { CountryService } from '@/app/shared/ui/country-input/country.service';
 import { environment } from '@/environments/environment';
 
 describe('CreateUpdateAuthorModal', () => {
@@ -10,10 +12,18 @@ describe('CreateUpdateAuthorModal', () => {
   let fixture: ComponentFixture<CreateUpdateAuthorModal>;
   let httpMock: HttpTestingController;
 
+  const mockCountryService = {
+    getCountries: () => of(['Argentina', 'Brasil', 'Portugal']),
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CreateUpdateAuthorModal],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CountryService, useValue: mockCountryService },
+      ],
     }).compileComponents();
 
     httpMock = TestBed.inject(HttpTestingController);
@@ -37,8 +47,8 @@ describe('CreateUpdateAuthorModal', () => {
   it('should emit cancel when clicking cancel button', () => {
     spyOn(component.cancel, 'emit');
 
-    const cancelButton = fixture.nativeElement.querySelectorAll('button')[0];
-    cancelButton.click();
+    const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
+    buttons[0].click();
 
     expect(component.cancel.emit).toHaveBeenCalled();
   });
@@ -119,11 +129,12 @@ describe('CreateUpdateAuthorModal', () => {
     expect(component.isLoading()).toBeFalse();
   });
 
-  it('should disable create button when form is invalid', () => {
+  it('should disable submit button when form is invalid', () => {
     fixture.detectChanges();
 
-    const createButton = fixture.nativeElement.querySelectorAll('button')[1];
-    expect(createButton.disabled).toBeTrue();
+    const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
+    const submitButton = buttons[buttons.length - 1];
+    expect(submitButton.disabled).toBeTrue();
   });
 
   it('should disable both buttons while loading', () => {
@@ -136,7 +147,7 @@ describe('CreateUpdateAuthorModal', () => {
     component.submit();
     fixture.detectChanges();
 
-    const buttons = fixture.nativeElement.querySelectorAll('button');
+    const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
     expect(buttons[0].disabled).toBeTrue();
     expect(buttons[1].disabled).toBeTrue();
 
@@ -149,6 +160,10 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
   let component: CreateUpdateAuthorModal;
   let fixture: ComponentFixture<CreateUpdateAuthorModal>;
   let httpMock: HttpTestingController;
+
+  const mockCountryService = {
+    getCountries: () => of(['Argentina', 'Brasil', 'Portugal']),
+  };
 
   const mockAuthor: Author = {
     id: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
@@ -163,7 +178,11 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CreateUpdateAuthorModal],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CountryService, useValue: mockCountryService },
+      ],
     }).compileComponents();
 
     httpMock = TestBed.inject(HttpTestingController);
@@ -219,7 +238,8 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
   });
 
   it('should show button text "Salvar alterações" when in update mode', () => {
-    const submitButton = fixture.nativeElement.querySelectorAll('button')[1];
+    const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
+    const submitButton = buttons[buttons.length - 1];
     expect(submitButton.textContent).toContain('Salvar alterações');
   });
 });
