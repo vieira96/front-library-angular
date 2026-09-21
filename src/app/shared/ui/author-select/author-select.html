@@ -56,7 +56,7 @@
   </div>
 
   @if (isOpen()) {
-    <div class="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg mb-4">
+    <div class="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
       @if (isLoading()) {
         <div class="flex items-center justify-center px-4 py-3 text-sm text-gray-500">
           <svg lucideLoader class="mr-2 h-4 w-4 animate-spin text-indigo-500"></svg>
@@ -89,6 +89,14 @@
           Nenhum autor encontrado
         </div>
       }
+      <button
+        type="button"
+        class="flex w-full items-center gap-2 border-t border-gray-200 px-4 py-2.5 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-50"
+        (click)="onCreateNew()"
+      >
+        <svg lucidePlus class="h-4 w-4"></svg>
+        Cadastrar novo autor
+      </button>
     </div>
   }
 </div>

@@ -31,7 +31,7 @@ export class CreateUpdateAuthorModal implements OnInit {
 
   readonly author = input<Author | null>(null);
   readonly cancel = output<void>();
-  readonly success = output<void>();
+  readonly success = output<string>();
 
   readonly isUpdate = computed(() => !!this.author());
   readonly isLoading = signal(false);
@@ -88,9 +88,9 @@ export class CreateUpdateAuthorModal implements OnInit {
       : this.authorsApi.createAuthor(request);
 
     observable.subscribe({
-      next: () => {
+      next: (author: Author) => {
         this.isLoading.set(false);
-        this.success.emit();
+        this.success.emit(author.id);
       },
       error: (err) => {
         this.errorMessage.set(err.error?.message || 'Não foi possível salvar o autor.');

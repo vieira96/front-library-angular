@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { LucideSearch, LucideChevronDown, LucideX, LucideLoader } from '@lucide/angular';
+import { LucideSearch, LucideChevronDown, LucideX, LucideLoader, LucidePlus } from '@lucide/angular';
 import { FormsModule } from '@angular/forms';
 import { AuthorsApiService } from '@/app/features/admin/authors/authors-api.service';
 import { Author } from '@/app/features/admin/authors/author.model';
@@ -18,7 +18,7 @@ import { Author } from '@/app/features/admin/authors/author.model';
 @Component({
   selector: 'app-author-select',
   standalone: true,
-  imports: [FormsModule, LucideSearch, LucideChevronDown, LucideX, LucideLoader],
+  imports: [FormsModule, LucideSearch, LucideChevronDown, LucideX, LucideLoader, LucidePlus],
   templateUrl: './author-select.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -37,6 +37,7 @@ export class AuthorSelect implements OnInit, OnDestroy {
   readonly disabled = input<boolean>(false);
 
   readonly valueChange = output<string>();
+  readonly createNew = output<void>();
 
   readonly searchQuery = signal('');
   readonly authors = signal<Author[]>([]);
@@ -46,6 +47,8 @@ export class AuthorSelect implements OnInit, OnDestroy {
 
   private currentPage = 1;
   private hasNext = true;
+  private pendingAuthorId = '';
+  private currentApiQuery = '';
 
   ngOnInit(): void {
     if (this.name()) {
@@ -98,12 +101,23 @@ export class AuthorSelect implements OnInit, OnDestroy {
     this.isOpen.update(open => !open);
   }
 
+  onCreateNew(): void {
+    this.isOpen.set(false);
+    this.createNew.emit();
+  }
+
+  reloadAndSelect(authorId: string): void {
+    this.pendingAuthorId = authorId;
+    this.loadAuthors(1, '');
+  }
+
   private loadAuthors(page: number, name: string): void {
     if (this.isLoading() || this.isLoadingMore()) {
       return;
     }
 
     if (page === 1) {
+      this.currentApiQuery = name;
       this.isLoading.set(true);
     } else {
       this.isLoadingMore.set(true);
@@ -120,6 +134,15 @@ export class AuthorSelect implements OnInit, OnDestroy {
         this.hasNext = response.hasNext;
         this.isLoading.set(false);
         this.isLoadingMore.set(false);
+
+        if (this.pendingAuthorId) {
+          const author = this.authors().find(a => a.id === this.pendingAuthorId);
+          if (author) {
+            this.searchQuery.set(author.name);
+            this.valueChange.emit(author.id);
+            this.pendingAuthorId = '';
+          }
+        }
       },
       error: () => {
         this.isLoading.set(false);
@@ -171,8 +194,7 @@ export class AuthorSelect implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(() => {
-        const query = this.searchQuery();
-        this.loadAuthors(this.currentPage + 1, query);
+        this.loadAuthors(this.currentPage + 1, this.currentApiQuery);
       });
   }
 }

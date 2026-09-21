@@ -157,12 +157,14 @@
 
       <div>
         <app-author-select
+          #authorSelect
           label="Autor"
           [required]="true"
           [invalid]="!!(authorId?.invalid && authorId?.touched)"
           [value]="authorId?.value || ''"
           [name]="book()?.author?.name || ''"
           (valueChange)="onAuthorChange($event)"
+          (createNew)="onCreateNewAuthor()"
         ></app-author-select>
         @if (authorId?.invalid && authorId?.touched) {
           <p class="mt-1 text-sm text-red-600">
@@ -206,3 +208,10 @@
     </div>
   </div>
 </div>
+
+@if (isAuthorModalOpen()) {
+  <app-create-update-author-modal
+    (cancel)="onAuthorModalCancel()"
+    (success)="onAuthorCreated($event)"
+  ></app-create-update-author-modal>
+}

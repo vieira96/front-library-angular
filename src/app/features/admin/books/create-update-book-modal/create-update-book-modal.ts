@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, computed, signal, input, output, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal, input, output, inject, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { BooksApiService } from '@/app/features/books/books-api.service';
 import { Book } from '@/app/features/books/book.model';
 import { AuthorSelect } from '@/app/shared/ui/author-select/author-select';
+import { CreateUpdateAuthorModal } from '@/app/features/admin/authors/create-update-author-modal/create-update-author-modal';
 import { LucideX } from '@lucide/angular';
 
 function notFutureDate(): ValidatorFn {
@@ -22,13 +23,15 @@ function notFutureDate(): ValidatorFn {
 @Component({
   selector: 'app-create-update-book-modal',
   standalone: true,
-  imports: [ReactiveFormsModule, AuthorSelect, LucideX],
+  imports: [ReactiveFormsModule, AuthorSelect, CreateUpdateAuthorModal, LucideX],
   templateUrl: './create-update-book-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateUpdateBookModal implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly booksApi: BooksApiService = inject(BooksApiService);
+
+  @ViewChild('authorSelect') authorSelect!: AuthorSelect;
 
   readonly book = input<Book | null>(null);
   readonly cancel = output<void>();
@@ -37,6 +40,7 @@ export class CreateUpdateBookModal implements OnInit {
   readonly isUpdate = computed(() => !!this.book());
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly isAuthorModalOpen = signal(false);
 
   readonly form = this.formBuilder.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
@@ -89,6 +93,21 @@ export class CreateUpdateBookModal implements OnInit {
   onAuthorChange(value: string): void {
     this.authorId?.setValue(value);
     this.authorId?.markAsTouched();
+  }
+
+  onCreateNewAuthor(): void {
+    this.isAuthorModalOpen.set(true);
+  }
+
+  onAuthorCreated(authorId: string): void {
+    this.isAuthorModalOpen.set(false);
+    this.authorId?.setValue(authorId);
+    this.authorId?.markAsTouched();
+    this.authorSelect.reloadAndSelect(authorId);
+  }
+
+  onAuthorModalCancel(): void {
+    this.isAuthorModalOpen.set(false);
   }
 
   onPriceInput(event: Event): void {
