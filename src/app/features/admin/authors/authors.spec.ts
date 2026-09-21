@@ -43,6 +43,7 @@ describe('Authors', () => {
   };
 
   beforeEach(async () => {
+    // Arrange
     mockAuthState = {
       user: signal(null),
       restoreSession: jasmine.createSpy('restoreSession').and.returnValue(of(void 0)),
@@ -70,31 +71,39 @@ describe('Authors', () => {
   });
 
   it('should create', () => {
+    // Arrange
     fixture.detectChanges();
 
+    // Act
     const req = httpMock.expectOne(
       `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
     );
     req.flush(mockAuthorsResponse);
 
+    // Assert
     expect(component).toBeTruthy();
   });
 
   it('should load authors on init', () => {
+    // Arrange
     fixture.detectChanges();
 
+    // Act
     const req = httpMock.expectOne(
       `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
     );
     req.flush(mockAuthorsResponse);
 
+    // Assert
     expect(component.authors().length).toBe(1);
     expect(component.authors()[0].name).toBe('Machado de Assis');
   });
 
   it('should show loading state initially', () => {
+    // Arrange
     expect(component.isLoading()).toBeTrue();
 
+    // Act
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -102,33 +111,41 @@ describe('Authors', () => {
     );
     req.flush(mockAuthorsResponse);
 
+    // Assert
     expect(component.isLoading()).toBeFalse();
   });
 
   it('should show error message when API fails', () => {
+    // Arrange
     fixture.detectChanges();
 
+    // Act
     const req = httpMock.expectOne(
       `${environment.apiBaseUrl}/authors?page=1&size=10&include=bookCount`
     );
     req.flush('Server error', { status: 500, statusText: 'Server Error' });
 
+    // Assert
     expect(component.authorsErrorMessage()).toBe('Não foi possível carregar os autores.');
   });
 
   it('should log out when session restoration fails', () => {
+    // Arrange
     mockAuthState.restoreSession.and.returnValue(
       throwError(() => new Error('Sessão expirada.')),
     );
 
+    // Act
     fixture.detectChanges();
 
+    // Assert
     expect(component.errorMessage()).toBe('Sessão expirada.');
     expect(component.isLoading()).toBeFalse();
     expect(mockAuthState.logout).toHaveBeenCalled();
   });
 
   it('should set success message and reload after delete', () => {
+    // Arrange
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -136,8 +153,10 @@ describe('Authors', () => {
     );
     req.flush(mockAuthorsResponse);
 
+    // Act
     component.onDeleteSuccess();
 
+    // Assert
     expect(component.successMessage()).toBe('Autor excluído com sucesso.');
 
     const reloadReq = httpMock.expectOne(
@@ -147,6 +166,7 @@ describe('Authors', () => {
   });
 
   it('should open create modal when FAB is clicked', () => {
+    // Arrange
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -156,13 +176,16 @@ describe('Authors', () => {
 
     expect(component.isCreateUpdateModalOpen()).toBeFalse();
 
+    // Act
     const fabButton = fixture.nativeElement.querySelector('button.fixed');
     fabButton.click();
 
+    // Assert
     expect(component.isCreateUpdateModalOpen()).toBeTrue();
   });
 
   it('should close modal and show toast after successful creation', () => {
+    // Arrange
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -173,8 +196,10 @@ describe('Authors', () => {
     component.isCreateUpdateModalOpen.set(true);
     fixture.detectChanges();
 
+    // Act
     component.onModalSuccess();
 
+    // Assert
     expect(component.isCreateUpdateModalOpen()).toBeFalse();
     expect(component.successMessage()).toBe('Autor cadastrado com sucesso.');
 
@@ -185,6 +210,7 @@ describe('Authors', () => {
   });
 
   it('should open edit modal with author when clicking edit', () => {
+    // Arrange
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -193,17 +219,20 @@ describe('Authors', () => {
     req.flush(mockAuthorsResponse);
     fixture.detectChanges();
 
+    // Act
     const editButton = fixture.nativeElement.querySelector(
       '[data-testid="edit-author-1"]',
     );
     editButton.click();
 
+    // Assert
     expect(component.isCreateUpdateModalOpen()).toBeTrue();
     expect(component.authorToEdit()?.id).toBe('1');
     expect(component.authorToEdit()?.name).toBe('Machado de Assis');
   });
 
   it('should close modal and show toast after successful update', () => {
+    // Arrange
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -214,8 +243,10 @@ describe('Authors', () => {
     component.openEditModal(mockAuthorsResponse.content[0]);
     fixture.detectChanges();
 
+    // Act
     component.onModalSuccess();
 
+    // Assert
     expect(component.isCreateUpdateModalOpen()).toBeFalse();
     expect(component.authorToEdit()).toBeNull();
     expect(component.successMessage()).toBe('Autor atualizado com sucesso.');
@@ -227,6 +258,7 @@ describe('Authors', () => {
   });
 
   it('should clear authorToEdit when closing modal', () => {
+    // Arrange
     fixture.detectChanges();
 
     const req = httpMock.expectOne(
@@ -237,8 +269,10 @@ describe('Authors', () => {
     component.openEditModal(mockAuthorsResponse.content[0]);
     expect(component.authorToEdit()).not.toBeNull();
 
+    // Act
     component.closeModal();
 
+    // Assert
     expect(component.isCreateUpdateModalOpen()).toBeFalse();
     expect(component.authorToEdit()).toBeNull();
   });

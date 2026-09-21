@@ -33,6 +33,7 @@ describe('AdminDashboard', () => {
   });
 
   beforeEach(async () => {
+    // Arrange
     booksResponse = new Subject<PageResponse<Book>>();
     booksApi = jasmine.createSpyObj<BooksApiService>('BooksApiService', ['getBooks']);
     booksApi.getBooks.and.returnValue(booksResponse.asObservable());
@@ -51,16 +52,19 @@ describe('AdminDashboard', () => {
   });
 
   it('should create and load the first three books', () => {
+    // Assert
     expect(component).toBeTruthy();
     expect(booksApi.getBooks).toHaveBeenCalledWith(1, 3);
     expect(fixture.nativeElement.querySelector('.animate-spin')).not.toBeNull();
   });
 
   it('should display the returned books and total', () => {
+    // Act
     booksResponse.next(pageResponse(mockBooks));
     booksResponse.complete();
     fixture.detectChanges();
 
+    // Assert
     expect(fixture.nativeElement.querySelectorAll('app-book-card').length).toBe(1);
     expect(fixture.nativeElement.textContent).toContain('Dom Casmurro');
     expect(fixture.nativeElement.textContent).toContain('Total de livros: 1');
@@ -68,18 +72,22 @@ describe('AdminDashboard', () => {
   });
 
   it('should display an empty state when no books are returned', () => {
+    // Act
     booksResponse.next(pageResponse([]));
     booksResponse.complete();
     fixture.detectChanges();
 
+    // Assert
     expect(fixture.nativeElement.textContent).toContain('Nenhum livro cadastrado.');
     expect(fixture.nativeElement.querySelector('app-book-card')).toBeNull();
   });
 
   it('should display an error when loading books fails', () => {
+    // Act
     booksResponse.error(new Error('Falha na API'));
     fixture.detectChanges();
 
+    // Assert
     expect(fixture.nativeElement.textContent).toContain('Não foi possível carregar os livros.');
     expect(fixture.nativeElement.querySelector('.animate-spin')).toBeNull();
   });

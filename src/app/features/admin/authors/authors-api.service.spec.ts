@@ -9,6 +9,7 @@ describe('AuthorsApiService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    // Arrange
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
@@ -27,6 +28,7 @@ describe('AuthorsApiService', () => {
 
   describe('getAuthors', () => {
     it('should fetch authors with default params', () => {
+      // Arrange
       const mockResponse = {
         content: [],
         page: 1,
@@ -36,7 +38,9 @@ describe('AuthorsApiService', () => {
         hasNext: false,
       };
 
+      // Act
       service.getAuthors().subscribe((response) => {
+        // Assert
         expect(response).toEqual(mockResponse);
       });
 
@@ -48,6 +52,7 @@ describe('AuthorsApiService', () => {
     });
 
     it('should fetch authors with custom pagination', () => {
+      // Arrange
       const mockResponse = {
         content: [],
         page: 2,
@@ -57,7 +62,9 @@ describe('AuthorsApiService', () => {
         hasNext: true,
       };
 
+      // Act
       service.getAuthors(2, 5).subscribe((response) => {
+        // Assert
         expect(response).toEqual(mockResponse);
       });
 
@@ -71,10 +78,13 @@ describe('AuthorsApiService', () => {
 
   describe('deleteAuthor', () => {
     it('should delete author by id', () => {
+      // Arrange
       const authorId = 'd290f1ee-6c54-4b01-90e6-d701748f0851';
 
+      // Act
       service.deleteAuthor(authorId).subscribe();
 
+      // Assert
       const req = httpMock.expectOne(
         `${environment.apiBaseUrl}/authors/${authorId}`
       );

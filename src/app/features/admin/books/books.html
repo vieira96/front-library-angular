@@ -1,3 +1,11 @@
+@if (successMessage()) {
+  <app-toast
+    [message]="successMessage()!"
+    type="success"
+    (dismissed)="successMessage.set(null)"
+  ></app-toast>
+}
+
 @if (isLoading()) {
   <div class="flex justify-center">
     <svg lucideLoader class="h-8 w-8 animate-spin text-indigo-600"></svg>
@@ -42,7 +50,11 @@
       </p>
     } @else if (books().length) {
       <div class="mt-6">
-        <app-books-table [books]="books()"></app-books-table>
+        <app-books-table
+          [books]="books()"
+          (edit)="openEditModal($event)"
+          (success)="onDeleteSuccess()"
+        ></app-books-table>
       </div>
       <app-pagination
         [page]="currentPage()"
@@ -56,4 +68,20 @@
       </p>
     }
   </section>
+}
+
+<button
+  type="button"
+  class="fixed bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg transition-colors hover:bg-indigo-500"
+  (click)="openCreateModal()"
+>
+  <svg lucidePlus class="h-6 w-6"></svg>
+</button>
+
+@if (isCreateUpdateModalOpen()) {
+  <app-create-update-book-modal
+    [book]="bookToEdit()"
+    (success)="onModalSuccess()"
+    (cancel)="closeModal()"
+  ></app-create-update-book-modal>
 }

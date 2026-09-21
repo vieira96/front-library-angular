@@ -1,0 +1,94 @@
+<div class="relative">
+  @if (label()) {
+    <label class="mb-1 block text-sm font-medium text-gray-700">
+      {{ label() }}
+      @if (required()) {
+        <span class="text-red-500">*</span>
+      }
+    </label>
+  }
+
+  <div
+    class="relative flex items-center rounded-lg border bg-white transition-colors"
+    [class]="isOpen()
+      ? 'border-indigo-500 ring-2 ring-indigo-500/20'
+      : invalid()
+        ? 'border-red-500 ring-2 ring-red-500/20'
+        : 'border-gray-300 hover:border-gray-400'"
+    [class.opacity-50]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
+  >
+    <div class="pointer-events-none pl-3">
+      <svg lucideSearch class="h-4 w-4 text-gray-400"></svg>
+    </div>
+
+    <input
+      type="text"
+      [value]="searchQuery()"
+      placeholder="Buscar autor..."
+      [disabled]="disabled()"
+      class="block w-full border-0 bg-transparent px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none disabled:cursor-not-allowed"
+      (input)="onInput($event)"
+      (focus)="isOpen.set(authors().length > 0)"
+    />
+
+    @if (searchQuery() && !disabled()) {
+      <button
+        type="button"
+        class="mr-1 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+        (click)="onClear()"
+      >
+        <svg lucideX class="h-4 w-4"></svg>
+      </button>
+    }
+
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="mr-2 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed"
+      (click)="toggleDropdown()"
+    >
+      <svg lucideChevronDown
+        class="h-4 w-4 transition-transform"
+        [class.rotate-180]="isOpen()"
+      ></svg>
+    </button>
+  </div>
+
+  @if (isOpen()) {
+    <div class="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg mb-4">
+      @if (isLoading()) {
+        <div class="flex items-center justify-center px-4 py-3 text-sm text-gray-500">
+          <svg lucideLoader class="mr-2 h-4 w-4 animate-spin text-indigo-500"></svg>
+          Buscando autores...
+        </div>
+      } @else if (authors().length > 0) {
+        <div
+          class="max-h-60 overflow-auto py-1"
+          (scroll)="onScroll($event)"
+        >
+          @for (author of authors(); track author.id) {
+            <li
+              class="relative cursor-pointer select-none px-4 py-2 text-sm text-gray-900 transition-colors hover:bg-indigo-50 hover:text-indigo-600 list-none"
+              [class.bg-indigo-50]="author.id === value()"
+              [class.text-indigo-600]="author.id === value()"
+              (click)="onSelectAuthor(author)"
+            >
+              {{ author.name }}
+            </li>
+          }
+          @if (isLoadingMore()) {
+            <div class="flex items-center justify-center px-4 py-2 text-sm text-gray-500">
+              <svg lucideLoader class="mr-2 h-4 w-4 animate-spin text-indigo-500"></svg>
+              Carregando mais...
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="px-4 py-3 text-sm text-gray-500">
+          Nenhum autor encontrado
+        </div>
+      }
+    </div>
+  }
+</div>

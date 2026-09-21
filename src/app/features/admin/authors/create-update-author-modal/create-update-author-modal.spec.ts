@@ -17,6 +17,7 @@ describe('CreateUpdateAuthorModal', () => {
   };
 
   beforeEach(async () => {
+    // Arrange
     await TestBed.configureTestingModule({
       imports: [CreateUpdateAuthorModal],
       providers: [
@@ -41,35 +42,44 @@ describe('CreateUpdateAuthorModal', () => {
   });
 
   it('should not be in update mode when no author is provided', () => {
+    // Assert
     expect(component.isUpdate()).toBeFalse();
   });
 
   it('should emit cancel when clicking cancel button', () => {
+    // Arrange
     spyOn(component.cancel, 'emit');
 
+    // Act
     const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
     buttons[0].click();
 
+    // Assert
     expect(component.cancel.emit).toHaveBeenCalled();
   });
 
   it('should show validation errors when submitting empty form', () => {
+    // Act
     component.submit();
 
+    // Assert
     expect(component.name?.errors?.['required']).toBeTruthy();
     expect(component.birthdate?.errors?.['required']).toBeTruthy();
     expect(component.nationality?.errors?.['required']).toBeTruthy();
   });
 
   it('should show future date error for future birthdate', () => {
+    // Act
     component.birthdate?.setValue('2099-12-31');
     component.birthdate?.markAsTouched();
     fixture.detectChanges();
 
+    // Assert
     expect(component.birthdate?.errors?.['futureDate']).toBeTruthy();
   });
 
   it('should call POST API and emit success when creating', () => {
+    // Arrange
     spyOn(component.success, 'emit');
 
     component.form.patchValue({
@@ -78,8 +88,10 @@ describe('CreateUpdateAuthorModal', () => {
       nationality: 'Brasileira',
     });
 
+    // Act
     component.submit();
 
+    // Assert
     const req = httpMock.expectOne(`${environment.apiBaseUrl}/authors`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({
@@ -94,14 +106,17 @@ describe('CreateUpdateAuthorModal', () => {
   });
 
   it('should show error message when API returns error', () => {
+    // Arrange
     component.form.patchValue({
       name: 'Machado de Assis',
       birthdate: '1839-06-21',
       nationality: 'Brasileira',
     });
 
+    // Act
     component.submit();
 
+    // Assert
     const req = httpMock.expectOne(`${environment.apiBaseUrl}/authors`);
     req.flush(
       { message: 'Esse autor já está cadastrado no sistema.' },
@@ -113,14 +128,17 @@ describe('CreateUpdateAuthorModal', () => {
   });
 
   it('should set loading state while API is pending', () => {
+    // Arrange
     component.form.patchValue({
       name: 'Machado de Assis',
       birthdate: '1839-06-21',
       nationality: 'Brasileira',
     });
 
+    // Act
     component.submit();
 
+    // Assert
     expect(component.isLoading()).toBeTrue();
 
     const req = httpMock.expectOne(`${environment.apiBaseUrl}/authors`);
@@ -130,23 +148,28 @@ describe('CreateUpdateAuthorModal', () => {
   });
 
   it('should disable submit button when form is invalid', () => {
+    // Act
     fixture.detectChanges();
 
+    // Assert
     const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
     const submitButton = buttons[buttons.length - 1];
     expect(submitButton.disabled).toBeTrue();
   });
 
   it('should disable both buttons while loading', () => {
+    // Arrange
     component.form.patchValue({
       name: 'Machado de Assis',
       birthdate: '1839-06-21',
       nationality: 'Brasileira',
     });
 
+    // Act
     component.submit();
     fixture.detectChanges();
 
+    // Assert
     const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
     expect(buttons[0].disabled).toBeTrue();
     expect(buttons[1].disabled).toBeTrue();
@@ -176,6 +199,7 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
   };
 
   beforeEach(async () => {
+    // Arrange
     await TestBed.configureTestingModule({
       imports: [CreateUpdateAuthorModal],
       providers: [
@@ -197,16 +221,19 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
   });
 
   it('should be in update mode when author is provided', () => {
+    // Assert
     expect(component.isUpdate()).toBeTrue();
   });
 
   it('should pre-fill form with author data', () => {
+    // Assert
     expect(component.form.get('name')?.value).toBe('Machado de Assis');
     expect(component.form.get('birthdate')?.value).toBe('1839-06-21');
     expect(component.form.get('nationality')?.value).toBe('Brasileira');
   });
 
   it('should call PUT API and emit success when updating', () => {
+    // Arrange
     spyOn(component.success, 'emit');
 
     component.form.patchValue({
@@ -215,8 +242,10 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
       nationality: 'Brasileira',
     });
 
+    // Act
     component.submit();
 
+    // Assert
     const req = httpMock.expectOne(
       `${environment.apiBaseUrl}/authors/${mockAuthor.id}`
     );
@@ -233,13 +262,19 @@ describe('CreateUpdateAuthorModal - Update mode', () => {
   });
 
   it('should show title "Editar autor" when in update mode', () => {
+    // Act
     const title = fixture.nativeElement.querySelector('h3');
+
+    // Assert
     expect(title.textContent).toContain('Editar autor');
   });
 
   it('should show button text "Salvar alterações" when in update mode', () => {
+    // Act
     const buttons = fixture.nativeElement.querySelectorAll('.mt-6 button');
     const submitButton = buttons[buttons.length - 1];
+
+    // Assert
     expect(submitButton.textContent).toContain('Salvar alterações');
   });
 });

@@ -38,6 +38,7 @@ describe('BooksTable', () => {
   });
 
   beforeEach(async () => {
+    // Arrange
     await TestBed.configureTestingModule({
       imports: [BooksTable],
     }).compileComponents();
@@ -53,14 +54,18 @@ describe('BooksTable', () => {
   });
 
   it('should render a row for each book', () => {
+    // Act
     const rows = fixture.nativeElement.querySelectorAll('tbody tr');
 
+    // Assert
     expect(rows.length).toBe(2);
   });
 
   it('should display book data', () => {
+    // Act
     const firstRow = fixture.nativeElement.querySelector('tbody tr');
 
+    // Assert
     expect(firstRow.textContent).toContain('Dom Casmurro');
     expect(firstRow.textContent).toContain('978-85-359-0277-5');
     expect(firstRow.textContent).toContain('Machado de Assis');
@@ -68,14 +73,31 @@ describe('BooksTable', () => {
     expect(firstRow.textContent).toContain('49,90');
   });
 
-  it('should render disabled edit and delete actions for each book', () => {
-    const editButtons = fixture.nativeElement.querySelectorAll('[aria-label="Editar livro (indisponível)"]');
-    const deleteButtons = fixture.nativeElement.querySelectorAll('[aria-label="Excluir livro (indisponível)"]');
+  it('should render enabled edit and delete actions for each book', () => {
+    // Act
+    const editButtons = fixture.nativeElement.querySelectorAll('[data-testid^="edit-book-"]');
+    const deleteButtons = fixture.nativeElement.querySelectorAll('[data-testid^="delete-book-"]');
 
+    // Assert
     expect(editButtons.length).toBe(2);
     expect(deleteButtons.length).toBe(2);
-    [...editButtons, ...deleteButtons].forEach((button: HTMLButtonElement) => {
-      expect(button.disabled).toBeTrue();
+    editButtons.forEach((button: HTMLButtonElement) => {
+      expect(button.disabled).toBeFalse();
     });
+    deleteButtons.forEach((button: HTMLButtonElement) => {
+      expect(button.disabled).toBeFalse();
+    });
+  });
+
+  it('should emit edit with book when clicking edit button', () => {
+    // Arrange
+    spyOn(component.edit, 'emit');
+
+    // Act
+    const editButton = fixture.nativeElement.querySelector('[data-testid="edit-book-1"]');
+    editButton.click();
+
+    // Assert
+    expect(component.edit.emit).toHaveBeenCalledWith(mockBooks[0]);
   });
 });

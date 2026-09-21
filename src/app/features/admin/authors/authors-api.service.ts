@@ -11,11 +11,15 @@ export class AuthorsApiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiBaseUrl}/authors`;
 
-  getAuthors(page = 1, size = 10): Observable<PageResponse<Author>> {
-    const params = new HttpParams()
+  getAuthors(page = 1, size = 10, name?: string): Observable<PageResponse<Author>> {
+    let params = new HttpParams()
       .set('page', page)
       .set('size', size)
       .set('include', 'bookCount');
+
+    if (name) {
+      params = params.set('name', name);
+    }
 
     return this.http.get<PageResponse<Author>>(this.apiUrl, { params });
   }
