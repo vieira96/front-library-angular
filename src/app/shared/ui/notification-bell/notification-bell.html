@@ -1,0 +1,51 @@
+<div class="relative" (click)="$event.stopPropagation()">
+  <button
+    type="button"
+    (click)="toggle()"
+    class="relative p-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900 rounded-full"
+  >
+    <svg lucideBell class="h-5 w-5"></svg>
+    @if (unreadCount() > 0) {
+      <span class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+        {{ unreadCount() }}
+      </span>
+    }
+  </button>
+
+  @if (isOpen()) {
+    <div class="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-gray-200">
+      <div class="border-b border-gray-100 px-4 py-3">
+        <h3 class="text-sm font-semibold text-gray-900">Notificações</h3>
+      </div>
+
+      <div class="max-h-80 overflow-y-auto">
+        @for (notification of notifications(); track notification.id) {
+          <div
+            (click)="markAsRead(notification.id)"
+            class="flex cursor-pointer gap-3 border-b border-gray-50 px-4 py-1 transition-colors hover:bg-gray-50"
+            [class.bg-indigo-50]="!notification.read"
+          >
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">{{ notification.title }}</p>
+              <p class="mt-0.5 text-sm text-gray-500">{{ notification.message }}</p>
+              <p class="mt-1 text-xs text-gray-400">{{ notification.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+            @if (!notification.read) {
+              <span class="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-indigo-500"></span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="border-t border-gray-100 px-4 py-2.5 text-center">
+        <a
+          routerLink="/notifications"
+          (click)="close()"
+          class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+        >
+          Ver todas
+        </a>
+      </div>
+    </div>
+  }
+</div>

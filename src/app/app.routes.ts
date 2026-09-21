@@ -15,6 +15,12 @@ export const APP_ROUTES: Routes = [
       import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
+    path: 'notifications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/notification/notifications').then((m) => m.Notifications),
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () =>

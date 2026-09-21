@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject, OnInit } from '@angular/core';
 import { LucideLoader, LucidePlus } from '@lucide/angular';
 import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { Header } from '@/app/layout/header/header';
 import { AuthorsApiService } from './authors-api.service';
 import { Author } from './author.model';
 import { Pagination } from '@/app/shared/ui/pagination/pagination';
@@ -12,7 +11,7 @@ import { CreateUpdateAuthorModal } from './create-update-author-modal/create-upd
 @Component({
   selector: 'app-admin-authors',
   standalone: true,
-  imports: [Header, LucideLoader, LucidePlus, Pagination, AuthorsTable, Toast, CreateUpdateAuthorModal],
+  imports: [LucideLoader, LucidePlus, Pagination, AuthorsTable, Toast, CreateUpdateAuthorModal],
   templateUrl: './authors.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -43,10 +42,6 @@ export class Authors implements OnInit {
         this.authState.logout();
       },
     });
-  }
-
-  logout(): void {
-    this.authState.logout();
   }
 
   changePage(page: number): void {
