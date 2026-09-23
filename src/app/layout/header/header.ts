@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideLogOut, LucideHome } from '@lucide/angular';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { isAdmin } from '@/app/core/auth/helper/is-admin';
-import { NotificationBell } from '@/app/shared/ui/notification-bell/notification-bell';
+import { AuthStateService } from '../../core/auth/auth-state.service';
+import { isAdmin } from '../../core/auth/helper/is-admin';
+import { NotificationBell } from '../../shared/ui/notification-bell/notification-bell';
 
 @Component({
   selector: 'app-header',

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '@/environments/environment';
+import { environment } from '../../../environments/environment';
 import { SKIP_AUTH } from './auth-context';
 
 @Injectable({ providedIn: 'root' })

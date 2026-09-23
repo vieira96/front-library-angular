@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal, input, output } from '@angular/core';
-import { Book } from '@/app/features/books/book.model';
+import { Book } from '../../../books/book.model';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { LucidePencil, LucideTrash } from '@lucide/angular';
 import { DeleteBookModal } from '../delete-book-modal/delete-book-modal';

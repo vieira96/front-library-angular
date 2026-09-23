@@ -1,4 +1,4 @@
-import { User } from '@/app/core/user/user.model';
+import { User } from '../user/user.model';
 
 export interface AccessTokenResponse {
   accessToken: string;

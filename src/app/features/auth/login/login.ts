@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LucideLoader } from '@lucide/angular';
 import { LoginStateService } from './login-state.service';
-import { Toast } from '@/app/shared/ui/toast/toast';
+import { Toast } from '../../../shared/ui/toast/toast';
 
 @Component({
   selector: 'app-login',

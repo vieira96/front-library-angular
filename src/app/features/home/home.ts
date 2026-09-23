@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, signal, inject, OnInit } from '@angular/core';
 import { LucideLoader } from '@lucide/angular';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { Header } from '@/app/layout/header/header';
-import { BooksApiService } from '@/app/features/books/books-api.service';
-import { Book } from '@/app/features/books/book.model';
-import { BookCard } from '@/app/features/books/book-card/book-card';
-import { Pagination } from '@/app/shared/ui/pagination/pagination';
+import { AuthStateService } from '../../core/auth/auth-state.service';
+import { Header } from '../../layout/header/header';
+import { BooksApiService } from '../books/books-api.service';
+import { Book } from '../books/book.model';
+import { BookCard } from '../books/book-card/book-card';
+import { Pagination } from '../../shared/ui/pagination/pagination';
 
 @Component({
   selector: 'app-home',

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { BooksTable } from './books-table';
-import { Book } from '@/app/features/books/book.model';
+import { Book } from '../../../books/book.model';
 
 describe('BooksTable', () => {
   let component: BooksTable;

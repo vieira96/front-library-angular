@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, ChangeDetectionStrategy, signal, inject, OnInit, OnDestroy } from '@angular/core';
 import { LucideLoader, LucidePlus } from '@lucide/angular';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { BooksApiService } from '@/app/features/books/books-api.service';
-import { Book } from '@/app/features/books/book.model';
-import { Pagination } from '@/app/shared/ui/pagination/pagination';
+import { AuthStateService } from '../../../core/auth/auth-state.service';
+import { BooksApiService } from '../../books/books-api.service';
+import { Book } from '../../books/book.model';
+import { Pagination } from '../../../shared/ui/pagination/pagination';
 import { BooksTable } from './books-table/books-table';
-import { Toast } from '@/app/shared/ui/toast/toast';
+import { Toast } from '../../../shared/ui/toast/toast';
 import { CreateUpdateBookModal } from './create-update-book-modal/create-update-book-modal';
 
 @Component({

@@ -5,9 +5,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { Authors } from './authors';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { CountryService } from '@/app/shared/ui/country-input/country.service';
-import { environment } from '@/environments/environment';
+import { AuthStateService } from '../../../core/auth/auth-state.service';
+import { CountryService } from '../../../shared/ui/country-input/country.service';
+import { environment } from '../../../../environments/environment';
 
 describe('Authors', () => {
   let component: Authors;

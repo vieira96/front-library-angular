@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, input, output, inject } from '@angular/core';
-import { Book } from '@/app/features/books/book.model';
-import { BooksApiService } from '@/app/features/books/books-api.service';
+import { Book } from '../../../books/book.model';
+import { BooksApiService } from '../../../books/books-api.service';
 
 @Component({
   selector: 'app-delete-book-modal',

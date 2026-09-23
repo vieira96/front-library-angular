@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
-import { BookCard } from '@/app/features/books/book-card/book-card';
-import { BooksApiService } from '@/app/features/books/books-api.service';
-import { Book } from '@/app/features/books/book.model';
+import { BookCard } from '../../books/book-card/book-card';
+import { BooksApiService } from '../../books/books-api.service';
+import { Book } from '../../books/book.model';
 import { RouterLink } from '@angular/router';
 
 @Component({

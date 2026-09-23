@@ -4,8 +4,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { CreateUpdateAuthorModal } from './create-update-author-modal';
 import { Author } from '../author.model';
-import { CountryService } from '@/app/shared/ui/country-input/country.service';
-import { environment } from '@/environments/environment';
+import { CountryService } from '../../../../shared/ui/country-input/country.service';
+import { environment } from '../../../../../environments/environment';
 
 describe('CreateUpdateAuthorModal', () => {
   let component: CreateUpdateAuthorModal;

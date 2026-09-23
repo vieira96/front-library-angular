@@ -12,8 +12,8 @@ import {
 import { debounceTime, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { LucideSearch, LucideChevronDown, LucideX, LucideLoader, LucidePlus } from '@lucide/angular';
 import { FormsModule } from '@angular/forms';
-import { AuthorsApiService } from '@/app/features/admin/authors/authors-api.service';
-import { Author } from '@/app/features/admin/authors/author.model';
+import { AuthorsApiService } from '../../../features/admin/authors/authors-api.service';
+import { Author } from '../../../features/admin/authors/author.model';
 
 @Component({
   selector: 'app-author-select',

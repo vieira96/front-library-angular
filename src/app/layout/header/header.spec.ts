@@ -2,8 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { Header } from './header';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { User } from '@/app/core/user/user.model';
+import { AuthStateService } from '../../core/auth/auth-state.service';
+import { NotificationService } from '../../features/notification/notification.service';
+import { User } from '../../core/user/user.model';
 
 describe('Header', () => {
   let component: Header;
@@ -22,6 +23,14 @@ describe('Header', () => {
           useValue: {
             user: currentUser.asReadonly(),
             logout: jasmine.createSpy('logout'),
+          },
+        },
+        {
+          provide: NotificationService,
+          useValue: {
+            unreadCount: signal(0),
+            allNotifications: signal([]),
+            refresh: () => undefined,
           },
         },
       ],

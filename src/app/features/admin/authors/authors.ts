@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, signal, inject, OnInit } from '@angular/core';
 import { LucideLoader, LucidePlus } from '@lucide/angular';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
+import { AuthStateService } from '../../../core/auth/auth-state.service';
 import { AuthorsApiService } from './authors-api.service';
 import { Author } from './author.model';
-import { Pagination } from '@/app/shared/ui/pagination/pagination';
+import { Pagination } from '../../../shared/ui/pagination/pagination';
 import { AuthorsTable } from './authors-table/authors-table';
-import { Toast } from '@/app/shared/ui/toast/toast';
+import { Toast } from '../../../shared/ui/toast/toast';
 import { CreateUpdateAuthorModal } from './create-update-author-modal/create-update-author-modal';
 
 @Component({

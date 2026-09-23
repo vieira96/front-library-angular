@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { DeleteBookModal } from './delete-book-modal';
-import { Book } from '@/app/features/books/book.model';
-import { environment } from '@/environments/environment';
+import { Book } from '../../../books/book.model';
+import { environment } from '../../../../../environments/environment';
 
 describe('DeleteBookModal', () => {
   let component: DeleteBookModal;

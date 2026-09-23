@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 import { DeleteAuthorModal } from './delete-author-modal';
 import { Author } from '../author.model';
-import { environment } from '@/environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 describe('DeleteAuthorModal', () => {
   let component: DeleteAuthorModal;

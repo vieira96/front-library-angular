@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { catchError, throwError, tap } from 'rxjs';
 import { LoginApiService } from './login-api.service';
 import { LoginRequest } from './login-request.model';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
+import { AuthStateService } from '../../../core/auth/auth-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoginStateService {

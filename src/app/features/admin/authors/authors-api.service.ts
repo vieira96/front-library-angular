@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '@/environments/environment';
-import { PageResponse } from '@/app/core/http/page-response.model';
+import { environment } from '../../../../environments/environment';
+import { PageResponse } from '../../../core/http/page-response.model';
 import { Author } from './author.model';
 import { CreateAuthorRequest } from './create-update-author-modal/create-update-author-request.model';
 

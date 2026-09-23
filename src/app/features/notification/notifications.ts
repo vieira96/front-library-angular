@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { LucideBell, LucideCheckCheck } from '@lucide/angular';
-import { Header } from '@/app/layout/header/header';
+import { Header } from '../../layout/header/header';
 import { NotificationService } from './notification.service';
-import { NotificationCard } from '@/app/features/notification/notification-card/notification-card';
-import { Pagination } from '@/app/shared/ui/pagination/pagination';
+import { NotificationCard } from './notification-card/notification-card';
+import { Pagination } from '../../shared/ui/pagination/pagination';
 
 @Component({
   selector: 'app-notifications',

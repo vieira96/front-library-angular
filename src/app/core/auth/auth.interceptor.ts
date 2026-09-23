@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { catchError, switchMap, throwError } from 'rxjs';
-import { environment } from '@/environments/environment';
+import { environment } from '../../../environments/environment';
 import { SKIP_AUTH } from './auth-context';
 import { AccessTokenStoreService } from './access-token-store.service';
 import { SessionRefreshService } from './session-refresh.service';

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Observable, catchError, finalize, shareReplay, tap, throwError } from 'rxjs';
-import { environment } from '@/environments/environment';
+import { environment } from '../../../environments/environment';
 import { AccessTokenResponse } from './access-token-response.model';
 import { AccessTokenStoreService } from './access-token-store.service';
 

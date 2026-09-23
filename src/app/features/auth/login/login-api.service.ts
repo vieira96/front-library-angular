@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginRequest } from './login-request.model';
-import { environment } from '@/environments/environment';
-import { SKIP_AUTH } from '@/app/core/auth/auth-context';
-import { AccessTokenResponse } from '@/app/core/auth/access-token-response.model';
+import { environment } from '../../../../environments/environment';
+import { SKIP_AUTH } from '../../../core/auth/auth-context';
+import { AccessTokenResponse } from '../../../core/auth/access-token-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class LoginApiService {

@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, ChangeDetectionStrategy, effect, HostListener, inject, OnDestroy, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideLayoutDashboard, LucideUsers, LucideBookOpen, LucideMenu, LucideX } from '@lucide/angular';
-import { Header } from '@/app/layout/header/header';
+import { Header } from '../../layout/header/header';
 
 @Component({
   selector: 'app-admin-layout',

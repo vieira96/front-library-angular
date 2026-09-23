@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideBell } from '@lucide/angular';
-import { NotificationService } from '@/app/features/notification/notification.service';
-import { NotificationCard } from '@/app/features/notification/notification-card/notification-card';
+import { NotificationService } from '../../../features/notification/notification.service';
+import { NotificationCard } from '../../../features/notification/notification-card/notification-card';
 
 @Component({
   selector: 'app-notification-bell',

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { AuthorSelect } from './author-select';
-import { environment } from '@/environments/environment';
+import { environment } from '../../../../environments/environment';
 
 describe('AuthorSelect', () => {
   let component: AuthorSelect;

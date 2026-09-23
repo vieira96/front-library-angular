@@ -2,7 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, of } from 'rxjs';
 import { AuthApiService } from './auth-api.service';
-import { User } from '@/app/core/user/user.model';
+import { User } from '../user/user.model';
 import { AccessTokenStoreService } from './access-token-store.service';
 import { SessionRefreshService } from './session-refresh.service';
 import { AccessTokenResponse } from './access-token-response.model';

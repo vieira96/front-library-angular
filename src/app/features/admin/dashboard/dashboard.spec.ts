@@ -4,9 +4,9 @@ import localePt from '@angular/common/locales/pt';
 import { provideRouter } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AdminDashboard } from './dashboard';
-import { BooksApiService } from '@/app/features/books/books-api.service';
-import { Book } from '@/app/features/books/book.model';
-import { PageResponse } from '@/app/core/http/page-response.model';
+import { BooksApiService } from '../../books/books-api.service';
+import { Book } from '../../books/book.model';
+import { PageResponse } from '../../../core/http/page-response.model';
 
 describe('AdminDashboard', () => {
   let component: AdminDashboard;

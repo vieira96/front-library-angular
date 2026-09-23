@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, computed, signal, input, output, inject, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { BooksApiService } from '@/app/features/books/books-api.service';
-import { Book } from '@/app/features/books/book.model';
-import { AuthorSelect } from '@/app/shared/ui/author-select/author-select';
-import { CreateUpdateAuthorModal } from '@/app/features/admin/authors/create-update-author-modal/create-update-author-modal';
+import { BooksApiService } from '../../../books/books-api.service';
+import { Book } from '../../../books/book.model';
+import { AuthorSelect } from '../../../../shared/ui/author-select/author-select';
+import { CreateUpdateAuthorModal } from '../../authors/create-update-author-modal/create-update-author-modal';
 import { LucideX } from '@lucide/angular';
 
 function notFutureDate(): ValidatorFn {

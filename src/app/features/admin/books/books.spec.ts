@@ -5,8 +5,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { Books } from './books';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
-import { environment } from '@/environments/environment';
+import { AuthStateService } from '../../../core/auth/auth-state.service';
+import { environment } from '../../../../environments/environment';
 
 describe('Books', () => {
   let component: Books;
