@@ -20,20 +20,7 @@
 
       <div class="max-h-80 overflow-y-auto">
         @for (notification of notifications(); track notification.id) {
-          <div
-            (click)="markAsRead(notification.id)"
-            class="flex cursor-pointer gap-3 border-b border-gray-50 px-4 py-1 transition-colors hover:bg-gray-50"
-            [class.bg-indigo-50]="!notification.read"
-          >
-            <div class="flex-1">
-              <p class="text-sm font-medium text-gray-900">{{ notification.title }}</p>
-              <p class="mt-0.5 text-sm text-gray-500">{{ notification.message }}</p>
-              <p class="mt-1 text-xs text-gray-400">{{ notification.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
-            </div>
-            @if (!notification.read) {
-              <span class="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-indigo-500"></span>
-            }
-          </div>
+          <app-notification-card variant="compact" [notification]="notification" />
         }
       </div>
 

@@ -1,33 +1,34 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { LucideBell, LucideCheckCheck } from '@lucide/angular';
 import { Header } from '@/app/layout/header/header';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
 import { NotificationService } from './notification.service';
+import { NotificationCard } from '@/app/features/notification/notification-card/notification-card';
+import { Pagination } from '@/app/shared/ui/pagination/pagination';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [Header, DatePipe, LucideBell, LucideCheckCheck],
+  imports: [Header, LucideBell, LucideCheckCheck, NotificationCard, Pagination],
   templateUrl: './notifications.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Notifications {
-  private readonly authState = inject(AuthStateService);
+export class Notifications implements OnInit {
   private readonly notificationService = inject(NotificationService);
 
   readonly notifications = this.notificationService.allNotifications;
   readonly unreadCount = this.notificationService.unreadCount;
+  readonly page = this.notificationService.page;
+  readonly totalPages = this.notificationService.totalPages;
 
-  markAsRead(id: string): void {
-    this.notificationService.markAsRead(id);
+  ngOnInit(): void {
+    this.notificationService.refresh();
+  }
+
+  goToPage(page: number): void {
+    this.notificationService.loadPage(page);
   }
 
   markAllAsRead(): void {
     this.notificationService.markAllAsRead();
-  }
-
-  logout(): void {
-    this.authState.logout();
   }
 }

@@ -3,7 +3,6 @@ import { Component, ChangeDetectionStrategy, effect, HostListener, inject, OnDes
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideLayoutDashboard, LucideUsers, LucideBookOpen, LucideMenu, LucideX } from '@lucide/angular';
 import { Header } from '@/app/layout/header/header';
-import { AuthStateService } from '@/app/core/auth/auth-state.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -13,7 +12,6 @@ import { AuthStateService } from '@/app/core/auth/auth-state.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminLayout implements OnDestroy {
-  private readonly authState = inject(AuthStateService);
   private readonly document = inject(DOCUMENT);
   private previousBodyOverflow = '';
 
@@ -48,9 +46,5 @@ export class AdminLayout implements OnDestroy {
 
   ngOnDestroy(): void {
     this.document.body.style.overflow = this.previousBodyOverflow;
-  }
-
-  logout(): void {
-    this.authState.logout();
   }
 }

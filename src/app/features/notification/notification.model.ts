@@ -4,4 +4,6 @@ export interface Notification {
   message: string;
   read: boolean;
   createdAt: Date;
+  url: string | null;
+  external: boolean;
 }

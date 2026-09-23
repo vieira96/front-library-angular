@@ -40,10 +40,6 @@ export class Home implements OnInit {
     });
   }
 
-  logout(): void {
-    this.authState.logout();
-  }
-
   changePage(page: number): void {
     if (page < 1 || page > this.totalPages() || page === this.currentPage()) {
       return;

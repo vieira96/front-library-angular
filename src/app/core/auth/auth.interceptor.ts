@@ -10,7 +10,23 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const accessTokenStore = inject(AccessTokenStoreService);
   const sessionRefresh = inject(SessionRefreshService);
   const isApiRequest = request.url.startsWith(environment.apiBaseUrl);
+  const isNotificationRequest = request.url.startsWith(
+    environment.notificationsApiBaseUrl
+  );
   const shouldSkipAuth = request.context.get(SKIP_AUTH);
+
+  if (isNotificationRequest) {
+    const notificationToken = accessTokenStore.token();
+    return next(
+      notificationToken
+        ? request.clone({
+            setHeaders: {
+              Authorization: `Bearer ${notificationToken}`,
+            },
+          })
+        : request
+    );
+  }
 
   if (!isApiRequest) {
     return next(request);

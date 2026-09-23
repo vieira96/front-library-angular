@@ -5,15 +5,15 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LucideBell } from '@lucide/angular';
 import { NotificationService } from '@/app/features/notification/notification.service';
+import { NotificationCard } from '@/app/features/notification/notification-card/notification-card';
 
 @Component({
   selector: 'app-notification-bell',
   standalone: true,
-  imports: [DatePipe, RouterLink, LucideBell],
+  imports: [RouterLink, LucideBell, NotificationCard],
   templateUrl: './notification-bell.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,15 +25,15 @@ export class NotificationBell {
   readonly notifications = this.notificationService.allNotifications;
 
   toggle(): void {
-    this.isOpen.update((v) => !v);
+    const opening = !this.isOpen();
+    this.isOpen.set(opening);
+    if (opening) {
+      this.notificationService.refresh();
+    }
   }
 
   close(): void {
     this.isOpen.set(false);
-  }
-
-  markAsRead(id: string): void {
-    this.notificationService.markAsRead(id);
   }
 
   @HostListener('document:click')

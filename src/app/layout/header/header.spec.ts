@@ -19,7 +19,10 @@ describe('Header', () => {
         provideRouter([]),
         {
           provide: AuthStateService,
-          useValue: { user: currentUser.asReadonly() },
+          useValue: {
+            user: currentUser.asReadonly(),
+            logout: jasmine.createSpy('logout'),
+          },
         },
       ],
     }).compileComponents();
@@ -54,8 +57,10 @@ describe('Header', () => {
     expect(fixture.nativeElement.querySelector('a[href="/admin"]')?.textContent).toContain('Admin');
   });
 
-  it('should emit logout when the logout button is clicked', () => {
-    spyOn(component.logoutClick, 'emit');
+  it('should logout when the logout button is clicked', () => {
+    const authState = TestBed.inject(AuthStateService) as unknown as {
+      logout: jasmine.Spy;
+    };
     const logoutButton = Array.from(
       fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>,
     ).find((button) => button.textContent?.includes('Sair'));
@@ -63,7 +68,7 @@ describe('Header', () => {
     expect(logoutButton).toBeDefined();
     logoutButton!.click();
 
-    expect(component.logoutClick.emit).toHaveBeenCalled();
+    expect(authState.logout).toHaveBeenCalled();
   });
 
   function createUser(roles: string[]): User {
