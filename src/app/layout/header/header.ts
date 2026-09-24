@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { LucideLogOut, LucideHome } from '@lucide/angular';
 import { AuthStateService } from '../../core/auth/auth-state.service';
 import { isAdmin } from '../../core/auth/helper/is-admin';
+import { NotificationService } from '../../features/notification/notification.service';
 import { NotificationBell } from '../../shared/ui/notification-bell/notification-bell';
 
 @Component({
@@ -14,6 +15,7 @@ import { NotificationBell } from '../../shared/ui/notification-bell/notification
 })
 export class Header {
   private readonly authState = inject(AuthStateService);
+  private readonly notificationService = inject(NotificationService);
 
   readonly title = input<string>('Library App');
 
@@ -22,6 +24,7 @@ export class Header {
   }
 
   logout(): void {
+    this.notificationService.clearCache();
     this.authState.logout();
   }
 }

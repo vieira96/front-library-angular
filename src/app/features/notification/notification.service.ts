@@ -53,13 +53,26 @@ export class NotificationService {
   readonly totalPages = signal(1);
   private readonly size = 10;
   private readonly bellSize = 3;
+  private recentLoaded = false;
+  private pageLoaded = false;
 
   refresh(): void {
     this.getNotifications(this.page());
-    this.refreshUnreadCount();
+  }
+
+  ensurePageLoaded(): void {
+    if (this.pageLoaded) {
+      return;
+    }
+    this.pageLoaded = true;
+    this.refresh();
   }
 
   loadRecent(): void {
+    if (this.recentLoaded) {
+      return;
+    }
+    this.recentLoaded = true;
     this.http
       .get<PageResponse<NotificationResponse>>(this.apiUrl, {
         params: { page: 1, size: this.bellSize },
@@ -67,11 +80,22 @@ export class NotificationService {
       .pipe(catchError(() => of(null)))
       .subscribe((result) => {
         if (!result) {
+          this.recentLoaded = false;
           return;
         }
         this.recent.set(result.content.map(toNotification));
       });
     this.refreshUnreadCount();
+  }
+
+  clearCache(): void {
+    this.notifications.set([]);
+    this.recent.set([]);
+    this.unreadCount.set(0);
+    this.page.set(1);
+    this.totalPages.set(1);
+    this.recentLoaded = false;
+    this.pageLoaded = false;
   }
 
   getNotifications(page: number): void {

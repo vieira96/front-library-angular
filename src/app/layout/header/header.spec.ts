@@ -33,6 +33,7 @@ describe('Header', () => {
             recentNotifications: signal([]),
             loadRecent: () => undefined,
             refresh: () => undefined,
+            clearCache: () => undefined,
           },
         },
       ],
