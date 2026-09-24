@@ -175,6 +175,7 @@ describe('Books', () => {
 
     // Assert
     httpMock.expectNone(`${environment.apiBaseUrl}/books?page=1&size=10`);
+    expect(component.currentPage()).toBe(1);
   });
 
   it('should not reload when changing to invalid page', () => {

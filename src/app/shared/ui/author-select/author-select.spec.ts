@@ -206,7 +206,9 @@ describe('AuthorSelect', () => {
         && req.params.get('name') === 'Machado'
         && req.params.get('include') === 'bookCount'
     );
+    expect(searchReq.request.params.get('name')).toBe('Machado');
     searchReq.flush(mockAuthorsPage1);
+    expect(component.authors().length).toBe(2);
   }));
 
   it('should load more authors on scroll to bottom', fakeAsync(() => {
