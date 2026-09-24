@@ -30,6 +30,8 @@ describe('Header', () => {
           useValue: {
             unreadCount: signal(0),
             allNotifications: signal([]),
+            recentNotifications: signal([]),
+            loadRecent: () => undefined,
             refresh: () => undefined,
           },
         },
