@@ -1,32 +1,46 @@
 <div class="min-h-screen bg-slate-50">
-  <app-header [title]="'Notificações'"></app-header>
-
   <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <section aria-labelledby="notifications-title">
-      <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+      <div class="mb-6 flex flex-col gap-4">
+        <div class="w-full flex items-center justify-between">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
             <svg lucideBell class="h-5 w-5"></svg>
           </div>
-          <h1 id="notifications-title" class="text-2xl font-bold text-slate-900">Notificações</h1>
-          <p class="mt-1 text-sm text-slate-500">
-            @if (unreadCount() > 0) {
-              Você tem {{ unreadCount() }} notificação(ões) não lida(s).
-            } @else {
-              Você está em dia.
-            }
-          </p>
+          <button
+            type="button"
+            aria-label="Configurações de notificações"
+            title="Configurações de notificações"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
+          >
+            <svg lucideSettings class="h-5 w-5"></svg>
+          </button>
         </div>
 
-        <button
-          type="button"
-          [disabled]="unreadCount() === 0"
-          class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-          (click)="markAllAsRead()"
-        >
-          <svg lucideCheckCheck class="h-4 w-4"></svg>
-          Marcar todas como lidas
-        </button>
+        <div class="flex justify-between flex-col sm:flex-row gap-4 sm:items-center">
+          <div>
+            <h1 id="notifications-title" class="text-2xl font-bold text-slate-900">
+              Notificações
+            </h1>
+            <p class="mt-1 text-sm text-slate-500">
+              @if (unreadCount() > 0) {
+                Você tem {{ unreadCount() }} notificaç{{ unreadCount() == 1 ? 'ão' : 'ões' }} não lida{{ unreadCount() == 1 ? '' : 's' }}.
+              } @else {
+                Você está em dia.
+              }
+            </p>
+          </div>
+          <button
+            type="button"
+            [disabled]="unreadCount() === 0"
+            class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-50 gap-2"
+            (click)="markAllAsRead()"
+          >
+            <svg lucideCheckCheck class="h-4 w-4"></svg>
+            Marcar todas como lidas
+          </button>
+        </div>
+
+
       </div>
 
       @if (notifications().length) {

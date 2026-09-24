@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/guard/auth.guard';
 import { adminGuard } from './core/auth/guard/admin.guard';
+import { MainLayout } from './layout/main-layout';
 
 export const APP_ROUTES: Routes = [
   {
@@ -15,15 +16,20 @@ export const APP_ROUTES: Routes = [
       import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
-    path: 'notifications',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/notification/notifications').then((m) => m.Notifications),
-  },
-  {
     path: '',
+    component: MainLayout,
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/home/home').then((m) => m.Home),
+    children: [
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('./features/notification/notifications').then((m) => m.Notifications),
+      },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/home/home').then((m) => m.Home),
+      },
+    ],
   },
 ];

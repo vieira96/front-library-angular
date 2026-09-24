@@ -43,30 +43,38 @@ export class NotificationService {
   private readonly authState = inject(AuthStateService);
   private readonly apiUrl = `${environment.notificationsApiBaseUrl}/notifications`;
   private readonly notifications = signal<Notification[]>([]);
+  private readonly recent = signal<Notification[]>([]);
 
   readonly unreadCount = signal(0);
   readonly allNotifications = computed(() => this.notifications());
+  readonly recentNotifications = computed(() => this.recent());
 
-  constructor() {
-    effect(() => {
-      if (this.authState.user()) {
-        this.refresh();
-      } else {
-        this.notifications.set([]);
-        this.unreadCount.set(0);
-      }
-    });
-  }
   readonly page = signal(1);
   readonly totalPages = signal(1);
   private readonly size = 10;
+  private readonly bellSize = 3;
 
   refresh(): void {
-    this.loadPage(this.page());
+    this.getNotifications(this.page());
     this.refreshUnreadCount();
   }
 
-  loadPage(page: number): void {
+  loadRecent(): void {
+    this.http
+      .get<PageResponse<NotificationResponse>>(this.apiUrl, {
+        params: { page: 1, size: this.bellSize },
+      })
+      .pipe(catchError(() => of(null)))
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+        this.recent.set(result.content.map(toNotification));
+      });
+    this.refreshUnreadCount();
+  }
+
+  getNotifications(page: number): void {
     this.http
       .get<PageResponse<NotificationResponse>>(this.apiUrl, {
         params: { page, size: this.size },
@@ -84,13 +92,17 @@ export class NotificationService {
   }
 
   markAsRead(id: string): void {
-    const target = this.notifications().find((n) => n.id === id);
-    if (!target || target.read) {
+    const pagedTarget = this.notifications().find((n) => n.id === id);
+    const bellTarget = this.recent().find((n) => n.id === id);
+    if ((!pagedTarget || pagedTarget.read) && (!bellTarget || bellTarget.read)) {
       return;
     }
     this.http.patch(`${this.apiUrl}/${id}/read`, {}).subscribe({
       next: () => {
         this.notifications.update((items) =>
+          items.map((n) => (n.id === id ? { ...n, read: true } : n))
+        );
+        this.recent.update((items) =>
           items.map((n) => (n.id === id ? { ...n, read: true } : n))
         );
         this.unreadCount.update((count) => Math.max(0, count - 1));
@@ -108,6 +120,7 @@ export class NotificationService {
         this.notifications.update((items) =>
           items.map((n) => ({ ...n, read: true }))
         );
+        this.recent.update((items) => items.map((n) => ({ ...n, read: true })));
         this.unreadCount.set(0);
       },
       error: () => undefined,

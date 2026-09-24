@@ -22,14 +22,14 @@ export class NotificationBell {
 
   readonly isOpen = signal(false);
   readonly unreadCount = this.notificationService.unreadCount;
-  readonly notifications = this.notificationService.allNotifications;
+  readonly notifications = this.notificationService.recentNotifications;
+
+  ngOnInit(): void {
+    this.notificationService.loadRecent();
+  }
 
   toggle(): void {
-    const opening = !this.isOpen();
-    this.isOpen.set(opening);
-    if (opening) {
-      this.notificationService.refresh();
-    }
+    this.isOpen.update((open) => !open);
   }
 
   close(): void {

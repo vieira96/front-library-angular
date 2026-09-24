@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { LucideBell, LucideCheckCheck } from '@lucide/angular';
-import { Header } from '../../layout/header/header';
+import { LucideBell, LucideCheckCheck, LucideSettings } from '@lucide/angular';
 import { NotificationService } from './notification.service';
 import { NotificationCard } from './notification-card/notification-card';
 import { Pagination } from '../../shared/ui/pagination/pagination';
@@ -8,7 +7,7 @@ import { Pagination } from '../../shared/ui/pagination/pagination';
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [Header, LucideBell, LucideCheckCheck, NotificationCard, Pagination],
+  imports: [LucideBell, LucideCheckCheck, LucideSettings, NotificationCard, Pagination],
   templateUrl: './notifications.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,7 +24,7 @@ export class Notifications implements OnInit {
   }
 
   goToPage(page: number): void {
-    this.notificationService.loadPage(page);
+    this.notificationService.getNotifications(page);
   }
 
   markAllAsRead(): void {
