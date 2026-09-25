@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DOCUMENT } from '@angular/common';
+import { Router } from '@angular/router';
 import { Notification } from '../notification.model';
 import { NotificationService } from '../notification.service';
 
@@ -14,12 +15,19 @@ export class NotificationCard {
   readonly notification = input.required<Notification>();
   readonly variant = input<'compact' | 'full'>('full');
   private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
 
   onSelect(): void {
-    if (!this.notification().read) {
-      this.notificationService.markAsRead(this.notification().id);
+    const { id, read, path, url } = this.notification();
+    if (!read) {
+      this.notificationService.markAsRead(id);
     }
 
-    // fazer redirecionamento para a pagina do livro depois
+    if (path) {
+      this.router.navigate([path]);
+    } else if (url) {
+      this.document.defaultView?.open(url, '_blank', 'noopener');
+    }
   }
 }

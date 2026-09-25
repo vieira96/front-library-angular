@@ -12,8 +12,8 @@ interface NotificationResponse {
   read: boolean;
   readAt: string | null;
   createdAt: string;
+  path: string | null;
   url: string | null;
-  external: boolean;
 }
 
 interface PageResponse<T> {
@@ -32,8 +32,8 @@ function toNotification(item: NotificationResponse): Notification {
     message: item.message,
     read: item.read,
     createdAt: new Date(item.createdAt),
+    path: item.path,
     url: item.url,
-    external: item.external,
   };
 }
 
@@ -54,19 +54,6 @@ export class NotificationService {
   private readonly size = 10;
   private readonly bellSize = 3;
   private recentLoaded = false;
-  private pageLoaded = false;
-
-  refresh(): void {
-    this.getNotifications(this.page());
-  }
-
-  ensurePageLoaded(): void {
-    if (this.pageLoaded) {
-      return;
-    }
-    this.pageLoaded = true;
-    this.refresh();
-  }
 
   loadRecent(): void {
     if (this.recentLoaded) {
@@ -95,7 +82,6 @@ export class NotificationService {
     this.page.set(1);
     this.totalPages.set(1);
     this.recentLoaded = false;
-    this.pageLoaded = false;
   }
 
   getNotifications(page: number): void {

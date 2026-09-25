@@ -9,11 +9,11 @@ import { PreferencesApiService } from './notification-config-button/preferences-
 describe('Notifications', () => {
   let component: Notifications;
   let fixture: ComponentFixture<Notifications>;
-  let notificationService: { ensurePageLoaded: jasmine.Spy };
+  let notificationService: { getNotifications: jasmine.Spy };
 
   beforeEach(async () => {
     notificationService = {
-      ensurePageLoaded: jasmine.createSpy('ensurePageLoaded'),
+      getNotifications: jasmine.createSpy('getNotifications'),
     };
 
     await TestBed.configureTestingModule({
@@ -27,8 +27,7 @@ describe('Notifications', () => {
             unreadCount: signal(0),
             page: signal(1),
             totalPages: signal(1),
-            ensurePageLoaded: notificationService.ensurePageLoaded,
-            getNotifications: jasmine.createSpy('getNotifications'),
+            getNotifications: notificationService.getNotifications,
             markAllAsRead: jasmine.createSpy('markAllAsRead'),
           },
         },
@@ -51,8 +50,9 @@ describe('Notifications', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load the page once on init instead of refreshing', () => {
-    expect(notificationService.ensurePageLoaded).toHaveBeenCalledTimes(1);
+  it('should load the first page on init', () => {
+    expect(notificationService.getNotifications).toHaveBeenCalledTimes(1);
+    expect(notificationService.getNotifications).toHaveBeenCalledWith(1);
   });
 
   it('should render the config button', () => {

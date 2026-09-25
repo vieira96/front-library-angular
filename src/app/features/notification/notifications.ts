@@ -21,7 +21,7 @@ export class Notifications implements OnInit {
   readonly totalPages = this.notificationService.totalPages;
 
   ngOnInit(): void {
-    this.notificationService.ensurePageLoaded();
+    this.notificationService.getNotifications(1);
   }
 
   goToPage(page: number): void {

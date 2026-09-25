@@ -19,8 +19,8 @@ describe('NotificationService', () => {
         read: false,
         readAt: null,
         createdAt: '2026-01-01T00:00',
+        path: '/book/1',
         url: null,
-        external: false,
       },
     ],
     page: 1,
@@ -69,21 +69,20 @@ describe('NotificationService', () => {
     httpMock.expectNone(`${apiUrl}/unread-count`);
   });
 
-  it('should load the page once and ignore the second call', () => {
-    service.ensurePageLoaded();
+  it('should load the requested page', () => {
+    service.getNotifications(1);
 
     const listReq = httpMock.expectOne(`${apiUrl}?page=1&size=10`);
     expect(listReq.request.method).toBe('GET');
     listReq.flush(pageResponse);
 
     expect(service.allNotifications().length).toBe(1);
-
-    service.ensurePageLoaded();
-    httpMock.expectNone(`${apiUrl}?page=1&size=10`);
+    expect(service.page()).toBe(1);
+    expect(service.totalPages()).toBe(1);
   });
 
   it('should mark a notification as read locally and decrement the count', () => {
-    service.ensurePageLoaded();
+    service.getNotifications(1);
     httpMock.expectOne(`${apiUrl}?page=1&size=10`).flush(pageResponse);
     service.refreshUnreadCount();
     httpMock.expectOne(`${apiUrl}/unread-count`).flush({ count: 1 });
@@ -98,7 +97,7 @@ describe('NotificationService', () => {
   });
 
   it('should mark all as read locally and zero the count', () => {
-    service.ensurePageLoaded();
+    service.getNotifications(1);
     httpMock.expectOne(`${apiUrl}?page=1&size=10`).flush(pageResponse);
     service.refreshUnreadCount();
     httpMock.expectOne(`${apiUrl}/unread-count`).flush({ count: 1 });
@@ -113,7 +112,7 @@ describe('NotificationService', () => {
   });
 
   it('should clear the cache', () => {
-    service.ensurePageLoaded();
+    service.getNotifications(1);
     httpMock.expectOne(`${apiUrl}?page=1&size=10`).flush(pageResponse);
     service.refreshUnreadCount();
     httpMock.expectOne(`${apiUrl}/unread-count`).flush({ count: 1 });
