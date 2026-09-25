@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { Header } from './header';
 import { AuthStateService } from '../../core/auth/auth-state.service';
 import { NotificationService } from '../../features/notification/notification.service';
+import { NotificationRealtimeService } from '../../features/notification/notification-realtime.service';
 import { User } from '../../core/user/user.model';
 
 describe('Header', () => {
@@ -34,6 +35,13 @@ describe('Header', () => {
             loadRecent: () => undefined,
             refresh: () => undefined,
             clearCache: () => undefined,
+          },
+        },
+        {
+          provide: NotificationRealtimeService,
+          useValue: {
+            connect: () => undefined,
+            disconnect: () => undefined,
           },
         },
       ],

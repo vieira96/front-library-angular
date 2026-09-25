@@ -84,6 +84,16 @@ export class NotificationService {
     this.recentLoaded = false;
   }
 
+  pushRealtime(notification: Notification): void {
+    this.recent.update((items) => [notification, ...items].slice(0, this.bellSize));
+    if (this.page() === 1) {
+      this.notifications.update((items) =>
+        [notification, ...items].slice(0, this.size),
+      );
+    }
+    this.unreadCount.update((count) => count + 1);
+  }
+
   getNotifications(page: number): void {
     this.http
       .get<PageResponse<NotificationResponse>>(this.apiUrl, {

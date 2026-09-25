@@ -8,6 +8,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { LucideBell } from '@lucide/angular';
 import { NotificationService } from '../../../features/notification/notification.service';
+import { NotificationRealtimeService } from '../../../features/notification/notification-realtime.service';
 import { NotificationCard } from '../../../features/notification/notification-card/notification-card';
 
 @Component({
@@ -19,6 +20,7 @@ import { NotificationCard } from '../../../features/notification/notification-ca
 })
 export class NotificationBell {
   private readonly notificationService = inject(NotificationService);
+  private readonly realtime = inject(NotificationRealtimeService);
 
   readonly isOpen = signal(false);
   readonly unreadCount = this.notificationService.unreadCount;
@@ -26,6 +28,7 @@ export class NotificationBell {
 
   ngOnInit(): void {
     this.notificationService.loadRecent();
+    this.realtime.connect();
   }
 
   toggle(): void {
